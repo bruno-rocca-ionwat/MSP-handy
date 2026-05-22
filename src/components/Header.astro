@@ -2,29 +2,83 @@
 import Logo from '../components/Logo.astro';
 
 const navItems = [
-    { linkText: 'Home', href: '/' },
-    { linkText: 'Revalidation', href: '/revalidation' },
-    { linkText: 'Image CDN', href: '/image-cdn' },
-    { linkText: 'Edge Function', href: '/edge' },
-    { linkText: 'Blobs', href: '/blobs' }
+  { linkText: 'Home', href: '/' },
+  { linkText: 'Home Owners', href: '/Home Owners' },
+  { linkText: 'Property Managers', href: '/propertymanagerstest' },
+  {
+    linkText: 'Expertise',
+    href: '/Expertise',
+    children: [
+      { linkText: 'Wall Repair', href: '/Expertise/1' },
+      { linkText: 'Paint Touch-up', href: '/Expertise/2' },
+      { linkText: 'Plumbing', href: '/Expertise/3' },
+      { linkText: 'Electrical', href: '/Expertise/4' },
+      { linkText: 'Door Repair', href: '/Expertise/5' },
+      { linkText: 'Shutter-Blind Repair', href: '/Expertise/6' },
+      { linkText: 'Heating/Cooling Systems', href: '/Expertise/7' },
+      { linkText: 'Exterior Walls-Stucco', href: '/Expertise/8' },
+      { linkText: 'Lock-Access Systems', href: '/Expertise/9' },
+      { linkText: 'Security-monitoring Systems', href: '/Expertise/10' },
+    ],
+  },
+  { linkText: 'Instant Quote', href: '/blobs' },
 ];
 ---
 
 <nav class="flex flex-wrap items-center gap-4 pt-6 pb-16 sm:pt-12 sm:pb-24">
-    <a href="/">
-        <Logo />
-    </a>
-    {
-        !!navItems?.length && (
-            <ul class="flex flex-wrap gap-x-4 gap-y-1">
-                {navItems.map((item) => (
-                    <li>
-                        <a href={item.href} class="inline-block px-1.5 py-1 sm:px-3 sm:py-2">
-                            {item.linkText}
-                        </a>
-                    </li>
+  <a href="/" class="shrink-0">
+    <Logo />
+  </a>
+
+  <ul class="flex flex-wrap items-center gap-x-4 gap-y-1">
+    {navItems.map((item) => (
+      <li class:list={[item.children?.length ? 'relative group' : '']}>
+        <a
+          href={item.href}
+          class="inline-block px-1.5 py-1 sm:px-3 sm:py-2 hover:underline focus:underline"
+        >
+          {item.linkText}
+        </a>
+
+        {item.children?.length ? (
+          <>
+            {/*
+              "hover bridge" so the menu doesn't disappear when moving the mouse
+              from the parent link down into the dropdown.
+            */}
+            <div
+              class="
+                absolute left-0 top-full h-3 w-56
+                hidden group-hover:block group-focus-within:block
+              "
+            />
+
+            <div
+              class="
+                absolute left-0 top-full z-50 mt-3 min-w-56
+                rounded-md border border-slate-200 bg-white shadow-lg
+                invisible opacity-0 pointer-events-none
+                transition
+                group-hover:visible group-hover:opacity-100 group-hover:pointer-events-auto
+                group-focus-within:visible group-focus-within:opacity-100 group-focus-within:pointer-events-auto
+              "
+            >
+              <ul class="py-2">
+                {item.children.map((child) => (
+                  <li>
+                    <a
+                      href={child.href}
+                      class="block px-4 py-2 text-slate-900 hover:bg-slate-100 focus:bg-slate-100"
+                    >
+                      {child.linkText}
+                    </a>
+                  </li>
                 ))}
-            </ul>
-        )
-    }
+              </ul>
+            </div>
+          </>
+        ) : null}
+      </li>
+    ))}
+  </ul>
 </nav>
