@@ -1,15 +1,18 @@
 ---
-import { Image } from 'astro:assets';
 import Diff from '../components/Diff.astro';
 import Markdown from '../components/Markdown.astro';
 import Layout from '../layouts/Layout.astro';
 
-// Use an image from /public (served from the site root):
+// Use images from /public (served from the site root):
 const corgi = '/in-process1.jpg';
+const corgiWidth = 1200;
+const corgiHeight = 900;
 
 // Images in /public are served from the site root:
 const beforeImage = '/before1.jpg';
 const afterImage = '/after1.jpg';
+const comparisonImageWidth = 2048;
+const comparisonImageHeight = 1365;
 
 // In local dev, Netlify format auto-detection may not run the same way,
 // so force WebP (optional).
@@ -41,7 +44,7 @@ task: from 'Breezeway'; fix supply door as hinges are loose.
 task: from 'Breezeway'; fix inoperable RING system
 ---
  // After ...
-<Image src={corgi} alt="Corgi" /* ... additional props */ />
+<img src="${corgi}" width="${corgiWidth}" height="${corgiHeight}" alt="In-process refinishing work" />
 ~~~
 `;
 
@@ -51,17 +54,18 @@ const originalVsCdnSnippet = `
 ~~~jsx
 // <== On the left, BEFORE
 <img
-task: from 'Hostaway'; touch up paint in all areas
-task: from 'Hostaway'; touch up paint in all areas
-task: from 'Hostaway'; touch up paint in all areas
-task: from 'Hostaway'; touch up paint in all areas
+  src="${beforeImage}"
+  width="${comparisonImageWidth}"
+  height="${comparisonImageHeight}"
+  alt="Before"
 />
 
 // ==> On the right, AFTER
 <img
-  task complete: from 'Hostaway'; touch up paint in all areas
-  task complete: from 'Hostaway'; touch up paint in all areas
-  task complete: from 'Hostaway'; touch up paint in all areas
+  src="${afterImage}"
+  width="${comparisonImageWidth}"
+  height="${comparisonImageHeight}"
+  alt="After"
 />
 ~~~
 `;
@@ -81,9 +85,15 @@ detection, so format is set to WebP.
     <section>
       <Markdown content={astroImageSnippet} class="mb-8" />
       <figure>
-        <Image src={corgi} alt="Corgi" class="border-2 border-white rounded-lg" />
+        <img
+          src={corgi}
+          width={corgiWidth}
+          height={corgiHeight}
+          alt="In-process refinishing work"
+          class="border-2 border-white rounded-lg"
+        />
         <figcaption class="mt-2 text-sm italic">
-          In Process Photo: Sanding fromm 80 Grit to 280 Grit, Then apply durable clear coat.  </a>
+          In Process Photo: Sanding fromm 80 Grit to 280 Grit, Then apply durable clear coat.
         </figcaption>
       </figure>
     </section>
@@ -100,7 +110,14 @@ detection, so format is set to WebP.
               ></span>
 
               <!-- BEFORE -->
-              <img srcset={beforeImageSrcSet} sizes={sizes} alt="Before" />
+              <img
+                src={beforeImage}
+                srcset={beforeImageSrcSet}
+                sizes={sizes}
+                width={comparisonImageWidth}
+                height={comparisonImageHeight}
+                alt="Before"
+              />
             </div>
           </div>
         </Fragment>
@@ -113,7 +130,14 @@ detection, so format is set to WebP.
               ></span>
 
               <!-- AFTER -->
-              <img srcset={afterImageSrcSet} sizes={sizes} alt="After" />
+              <img
+                src={afterImage}
+                srcset={afterImageSrcSet}
+                sizes={sizes}
+                width={comparisonImageWidth}
+                height={comparisonImageHeight}
+                alt="After"
+              />
             </div>
           </div>
         </Fragment>
