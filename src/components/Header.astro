@@ -1,109 +1,74 @@
 ---
 import Logo from '../components/Logo.astro';
-const navItems = [
-  { linkText: 'Home', href: '/' },
-  { linkText: 'Home Owners', href: '/Home Owners' },
-  { linkText: 'Property Managers', href: '/propertymanagerstest' },
-  {
-    linkText: 'Expertise',
-    href: '/Expertise',
-    children: [
-      { linkText: 'Furniture Repair', href: '/Expertise/1' },
-      { linkText: 'Furniture Custom Build', href: '/Expertise/2' },
-      { linkText: 'Wood/Furniture Refinishing', href: '/Expertise/3' },
-      { linkText: 'Door and Smart Lock Repair', href: '/Expertise/4' },
-      { linkText: 'Window Repair and Replacement', href: '/Expertise/5' },
-      { linkText: 'Screen Installation and Repair', href: '/Expertise/6' },
-      { linkText: 'Power Washing-Deck Staining-Sealing', href: '/Expertise/7' },
-      { linkText: 'Exterior Walls-Stucco Repair', href: '/Expertise/8' },
-      { linkText: 'Interior Art Installation - Packaging', href: '/Expertise/9' },
-      { linkText: 'Camera Install-Security Systems Repair', href: '/Expertise/10' },
-      { linkText: 'Laundry (Washer and Dryer) Repair', href: '/Expertise/11' },
-      { linkText: 'Fridge and Purifier Repair', href: '/Expertise/12' },
-      { linkText: 'Kitchen Appliance Repair', href: '/Expertise/13' },
-      { linkText: 'HandyMan Services for PMs', href: '/Expertise/14' },
-    ],
-  },
-  { linkText: 'Instant Quote', href: '/blobs' },
-];
 ---
+
 <nav class="flex flex-wrap items-center gap-4 pt-6 pb-16 sm:pt-12 sm:pb-24">
   <a href="/" class="shrink-0">
     <Logo />
   </a>
   <ul class="flex flex-wrap items-center gap-x-4 gap-y-1">
-    {navItems.map((item) => (
-      <li class:list={[item.children?.length ? 'relative group' : '']}>
-        
-          href={item.href}
-          class="inline-block px-1.5 py-1 sm:px-3 sm:py-2 hover:underline focus:underline"
-        >
-          {item.linkText}
-        </a>
-        {item.children?.length ? (
-          <>
-            {/*
-              "hover bridge" so the menu doesn't disappear when moving the mouse
-              from the parent link down into the dropdown.
-            */}
-            <div
-              class="
-                absolute left-0 top-full h-3 w-56
-                hidden group-hover:block group-focus-within:block
-              "
-            />
-            <div
-              class="
-                absolute left-0 top-full z-50 mt-3 min-w-56
-                rounded-md border border-slate-700 bg-black shadow-lg
-                invisible opacity-0 pointer-events-none
-                transition
-                group-hover:visible group-hover:opacity-100 group-hover:pointer-events-auto
-                group-focus-within:visible group-focus-within:opacity-100 group-focus-within:pointer-events-auto
-              "
-            >
-              <ul class="py-2">
-                {item.children.map((child) => (
-                  <li>
-                    
-                      href={child.href}
-                      class="block px-4 py-2 text-white hover:bg-slate-800 focus:bg-slate-800"
-                    >
-                      {child.linkText}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </>
-        ) : null}
-      </li>
-    ))}
+
+    <li>
+      <a href="/" class="inline-block px-1.5 py-1 sm:px-3 sm:py-2 hover:underline focus:underline">Home</a>
+    </li>
+
+    <li>
+      <a href="/Home Owners" class="inline-block px-1.5 py-1 sm:px-3 sm:py-2 hover:underline focus:underline">Home Owners</a>
+    </li>
+
+    <li>
+      <a href="/propertymanagerstest" class="inline-block px-1.5 py-1 sm:px-3 sm:py-2 hover:underline focus:underline">Property Managers</a>
+    </li>
+
+    <li class="relative group" id="expertise-li">
+      <a href="/Expertise" class="inline-block px-1.5 py-1 sm:px-3 sm:py-2 hover:underline focus:underline">Expertise</a>
+      <div class="absolute left-0 top-full h-3 w-56 hidden group-hover:block group-focus-within:block"></div>
+      <div class="absolute left-0 top-full z-50 mt-3 min-w-56 rounded-md border border-slate-700 bg-black shadow-lg invisible opacity-0 pointer-events-none transition group-hover:visible group-hover:opacity-100 group-hover:pointer-events-auto group-focus-within:visible group-focus-within:opacity-100 group-focus-within:pointer-events-auto">
+        <ul class="py-2">
+          <li><a href="/Expertise/1"  class="block px-4 py-2 text-white hover:bg-slate-800 focus:bg-slate-800">Furniture Repair</a></li>
+          <li><a href="/Expertise/2"  class="block px-4 py-2 text-white hover:bg-slate-800 focus:bg-slate-800">Furniture Custom Build</a></li>
+          <li><a href="/Expertise/3"  class="block px-4 py-2 text-white hover:bg-slate-800 focus:bg-slate-800">Wood/Furniture Refinishing</a></li>
+          <li><a href="/Expertise/4"  class="block px-4 py-2 text-white hover:bg-slate-800 focus:bg-slate-800">Door and Smart Lock Repair</a></li>
+          <li><a href="/Expertise/5"  class="block px-4 py-2 text-white hover:bg-slate-800 focus:bg-slate-800">Window Repair and Replacement</a></li>
+          <li><a href="/Expertise/6"  class="block px-4 py-2 text-white hover:bg-slate-800 focus:bg-slate-800">Screen Installation and Repair</a></li>
+          <li><a href="/Expertise/7"  class="block px-4 py-2 text-white hover:bg-slate-800 focus:bg-slate-800">Power Washing-Deck Staining-Sealing</a></li>
+          <li><a href="/Expertise/8"  class="block px-4 py-2 text-white hover:bg-slate-800 focus:bg-slate-800">Exterior Walls-Stucco Repair</a></li>
+          <li><a href="/Expertise/9"  class="block px-4 py-2 text-white hover:bg-slate-800 focus:bg-slate-800">Interior Art Installation - Packaging</a></li>
+          <li><a href="/Expertise/10" class="block px-4 py-2 text-white hover:bg-slate-800 focus:bg-slate-800">Camera Install-Security Systems Repair</a></li>
+          <li><a href="/Expertise/11" class="block px-4 py-2 text-white hover:bg-slate-800 focus:bg-slate-800">Laundry (Washer and Dryer) Repair</a></li>
+          <li><a href="/Expertise/12" class="block px-4 py-2 text-white hover:bg-slate-800 focus:bg-slate-800">Fridge and Purifier Repair</a></li>
+          <li><a href="/Expertise/13" class="block px-4 py-2 text-white hover:bg-slate-800 focus:bg-slate-800">Kitchen Appliance Repair</a></li>
+          <li><a href="/Expertise/14" class="block px-4 py-2 text-white hover:bg-slate-800 focus:bg-slate-800">HandyMan Services for PMs</a></li>
+        </ul>
+      </div>
+    </li>
+
+    <li>
+      <a href="/blobs" class="inline-block px-1.5 py-1 sm:px-3 sm:py-2 hover:underline focus:underline">Instant Quote</a>
+    </li>
+
   </ul>
 </nav>
 
 <script>
-  const expertiseLi = document.querySelector('li.group');
-  if (expertiseLi) {
-    const link = expertiseLi.querySelector('a');
-    link.addEventListener('click', function(e) {
+  const li = document.getElementById('expertise-li');
+  if (li) {
+    li.querySelector('a').addEventListener('click', function(e) {
       if (!window.matchMedia('(hover: hover)').matches) {
-        if (!expertiseLi.classList.contains('open')) {
+        if (!li.classList.contains('open')) {
           e.preventDefault();
-          expertiseLi.classList.add('open');
+          li.classList.add('open');
         }
       }
     });
     document.addEventListener('click', function(e) {
-      if (!expertiseLi.contains(e.target)) {
-        expertiseLi.classList.remove('open');
-      }
+      if (!li.contains(e.target)) li.classList.remove('open');
     });
   }
 </script>
 
 <style>
-  li.group.open > div:last-child {
+  #expertise-li.open > div:last-child {
     visibility: visible !important;
     opacity: 1 !important;
     pointer-events: auto !important;
