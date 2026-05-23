@@ -47,10 +47,10 @@ export default function NewShape(props: Props) {
             </div>
             <div className="flex flex-wrap justify-center gap-4">
                 <button className="btn" onClick={randomizeBlob}>
-                    Randomize
+                    RANDOMIZE
                 </button>
                 <button className="btn" onClick={uploadBlob} disabled={uploadDisabled || wasUploaded || !blobData}>
-                    Upload
+                    CREATE
                 </button>
             </div>
         </>
