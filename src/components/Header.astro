@@ -1,6 +1,5 @@
 ---
 import Logo from '../components/Logo.astro';
-
 const navItems = [
   { linkText: 'Home', href: '/' },
   { linkText: 'Home Owners', href: '/Home Owners' },
@@ -19,37 +18,38 @@ const navItems = [
       { linkText: 'Exterior Walls-Stucco Repair', href: '/Expertise/8' },
       { linkText: 'Interior Art Installation - Packaging', href: '/Expertise/9' },
       { linkText: 'Camera Install-Security Systems Repair', href: '/Expertise/10' },
-       { linkText: 'Laundry (Washer and Dryer) Repair', href: '/Expertise/11' },
-       { linkText: 'Fridge and Purifier Repair', href: '/Expertise/12' },
-       { linkText: 'Kitchen Appliance Repair', href: '/Expertise/13' },
+      { linkText: 'Laundry (Washer and Dryer) Repair', href: '/Expertise/11' },
+      { linkText: 'Fridge and Purifier Repair', href: '/Expertise/12' },
+      { linkText: 'Kitchen Appliance Repair', href: '/Expertise/13' },
       { linkText: 'HandyMan Services for PMs', href: '/Expertise/14' },
     ],
   },
   { linkText: 'Instant Quote', href: '/blobs' },
 ];
 ---
-
 <nav class="flex flex-wrap items-center gap-4 pt-6 pb-16 sm:pt-12 sm:pb-24">
   <a href="/" class="shrink-0">
     <Logo />
   </a>
-
   <ul class="flex flex-wrap items-center gap-x-4 gap-y-1">
     {navItems.map((item) => (
       <li class:list={[item.children?.length ? 'relative group' : '']}>
-        <a
+        
           href={item.href}
           class="inline-block px-1.5 py-1 sm:px-3 sm:py-2 hover:underline focus:underline"
         >
           {item.linkText}
         </a>
-
         {item.children?.length ? (
           <>
-            {/*
-              "hover bridge" so the menu doesn't disappear when moving the mouse
-              from the parent link down into the dropdown.
-            */}
+            {/* Tap toggle button for mobile */}
+            <button
+              class="dropdown-toggle -ml-1 px-1 py-1 text-xs align-middle opacity-70 hover:opacity-100"
+              aria-label="Toggle Expertise menu"
+              aria-expanded="false"
+            >▾</button>
+
+            {/* Hover bridge – stops menu closing when mouse moves down */}
             <div
               class="
                 absolute left-0 top-full h-3 w-56
@@ -59,10 +59,11 @@ const navItems = [
 
             <div
               class="
+                dropdown-menu
                 absolute left-0 top-full z-50 mt-3 min-w-56
-                rounded-md border border-slate-200 bg-white shadow-lg
+                rounded-md border border-slate-700 bg-black shadow-lg
                 invisible opacity-0 pointer-events-none
-                transition
+                transition-all duration-150
                 group-hover:visible group-hover:opacity-100 group-hover:pointer-events-auto
                 group-focus-within:visible group-focus-within:opacity-100 group-focus-within:pointer-events-auto
               "
@@ -70,9 +71,9 @@ const navItems = [
               <ul class="py-2">
                 {item.children.map((child) => (
                   <li>
-                    <a
+                    
                       href={child.href}
-                      class="block px-4 py-2 text-slate-900 hover:bg-slate-100 focus:bg-slate-100"
+                      class="block px-4 py-2 text-white hover:bg-slate-800 focus:bg-slate-800"
                     >
                       {child.linkText}
                     </a>
@@ -86,3 +87,43 @@ const navItems = [
     ))}
   </ul>
 </nav>
+
+<style>
+  /* Forces the dropdown open when toggled via JS (mobile tap) */
+  li.dropdown-open .dropdown-menu {
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+  }
+</style>
+
+<script>
+  // Toggle dropdown on tap/click of the ▾ button
+  document.querySelectorAll('.dropdown-toggle').forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const li = btn.closest('li');
+      const isOpen = li.classList.contains('dropdown-open');
+      // Close all open dropdowns first
+      document.querySelectorAll('li.dropdown-open').forEach((el) =>
+        el.classList.remove('dropdown-open')
+      );
+      if (!isOpen) {
+        li.classList.add('dropdown-open');
+        btn.setAttribute('aria-expanded', 'true');
+      } else {
+        btn.setAttribute('aria-expanded', 'false');
+      }
+    });
+  });
+
+  // Close when tapping anywhere outside
+  document.addEventListener('click', () => {
+    document.querySelectorAll('li.dropdown-open').forEach((el) =>
+      el.classList.remove('dropdown-open')
+    );
+    document.querySelectorAll('.dropdown-toggle').forEach((btn) =>
+      btn.setAttribute('aria-expanded', 'false')
+    );
+  });
+</script>
