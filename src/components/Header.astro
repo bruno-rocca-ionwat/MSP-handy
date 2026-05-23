@@ -42,6 +42,10 @@ const navItems = [
         </a>
         {item.children?.length ? (
           <>
+            {/*
+              "hover bridge" so the menu doesn't disappear when moving the mouse
+              from the parent link down into the dropdown.
+            */}
             <div
               class="
                 absolute left-0 top-full h-3 w-56
@@ -79,18 +83,21 @@ const navItems = [
 </nav>
 
 <script>
-  const li = document.querySelector('li.group');
-  if (li) {
-    li.querySelector('a').addEventListener('click', function(e) {
+  const expertiseLi = document.querySelector('li.group');
+  if (expertiseLi) {
+    const link = expertiseLi.querySelector('a');
+    link.addEventListener('click', function(e) {
       if (!window.matchMedia('(hover: hover)').matches) {
-        if (!li.classList.contains('open')) {
+        if (!expertiseLi.classList.contains('open')) {
           e.preventDefault();
-          li.classList.add('open');
+          expertiseLi.classList.add('open');
         }
       }
     });
     document.addEventListener('click', function(e) {
-      if (!li.contains(e.target)) li.classList.remove('open');
+      if (!expertiseLi.contains(e.target)) {
+        expertiseLi.classList.remove('open');
+      }
     });
   }
 </script>
