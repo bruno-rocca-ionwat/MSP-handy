@@ -5,9 +5,9 @@ import ShapeEditor from './_components/ShapeEditor.tsx';
 import { uploadDisabled } from '../../utils';
 
 const explainer = `
-Step 1:  Click RANDOMIZE then click UPLOAD. Your place in line is set. </br>
-Step 2: COPY your unique JOB NUMBER (ex prospective-fly-474)</br>
-Step 3: PASTE this into form below</br>
+Step 1: Fill out field below. </br>
+Step 2: CREATE your unique JOB NUMBER (ex prospective-fly-474)</br>
+Step 3: PASTE this number into last filed of form below</br>
 Step 4: RECEIVE a QUOTE with 5 minutes</br>
 `;
 
@@ -34,17 +34,6 @@ User uploads are disabled in this site. To run your own and try it out:
   >
     <!-- required for Netlify form detection -->
     <input type="hidden" name="form-name" value="contact" />
-
-    <p class="space-y-2">
-      <label class="block font-semibold">
-        Copy Random Job Name Here
-        <input
-          type="text"
-          name="INQ"
-          class="mt-2 block w-full rounded border border-white/20 bg-white/10 px-3 py-2 text-white"
-        />
-      </label>
-    </p>
 
     <p class="space-y-2">
       <label class="block font-semibold">
@@ -171,6 +160,17 @@ User uploads are disabled in this site. To run your own and try it out:
           type="file"
           accept="image/*"
           class="mt-2 block w-full text-white file:mr-4 file:rounded file:border file:border-white/20 file:bg-white/10 file:px-3 file:py-2 file:text-white"
+        />
+      </label>
+    </p>
+
+    <p class="space-y-2">
+      <label class="block font-semibold">
+        Paste Random Job Name Here
+        <input
+          type="text"
+          name="INQ"
+          class="mt-2 block w-full rounded border border-white/20 bg-white/10 px-3 py-2 text-white"
         />
       </label>
     </p>
