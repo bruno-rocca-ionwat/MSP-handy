@@ -41,47 +41,22 @@ const navItems = [
           {item.linkText}
         </a>
         {item.children?.length ? (
-          <>
-            {/* Tap toggle button for mobile */}
-            <button
-              class="dropdown-toggle -ml-1 px-1 py-1 text-xs align-middle opacity-70 hover:opacity-100"
-              aria-label="Toggle Expertise menu"
-              aria-expanded="false"
-            >▾</button>
-
-            {/* Hover bridge – stops menu closing when mouse moves down */}
-            <div
-              class="
-                absolute left-0 top-full h-3 w-56
-                hidden group-hover:block group-focus-within:block
-              "
-            />
-
-            <div
-              class="
-                dropdown-menu
-                absolute left-0 top-full z-50 mt-3 min-w-56
-                rounded-md border border-slate-700 bg-black shadow-lg
-                invisible opacity-0 pointer-events-none
-                transition-all duration-150
-                group-hover:visible group-hover:opacity-100 group-hover:pointer-events-auto
-                group-focus-within:visible group-focus-within:opacity-100 group-focus-within:pointer-events-auto
-              "
-            >
-              <ul class="py-2">
-                {item.children.map((child) => (
-                  <li>
-                    
-                      href={child.href}
-                      class="block px-4 py-2 text-white hover:bg-slate-800 focus:bg-slate-800"
-                    >
-                      {child.linkText}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </>
+          <div
+            class="expertise-dropdown absolute left-0 top-full z-50 mt-3 min-w-56 rounded-md border border-slate-700 bg-black shadow-lg invisible opacity-0 pointer-events-none transition group-hover:visible group-hover:opacity-100 group-hover:pointer-events-auto group-focus-within:visible group-focus-within:opacity-100 group-focus-within:pointer-events-auto"
+          >
+            <ul class="py-2">
+              {item.children.map((child) => (
+                <li>
+                  
+                    href={child.href}
+                    class="block px-4 py-2 text-white hover:bg-slate-800 focus:bg-slate-800"
+                  >
+                    {child.linkText}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
         ) : null}
       </li>
     ))}
@@ -89,8 +64,7 @@ const navItems = [
 </nav>
 
 <style>
-  /* Forces the dropdown open when toggled via JS (mobile tap) */
-  li.dropdown-open .dropdown-menu {
+  li.dropdown-open .expertise-dropdown {
     visibility: visible !important;
     opacity: 1 !important;
     pointer-events: auto !important;
@@ -98,32 +72,23 @@ const navItems = [
 </style>
 
 <script>
-  // Toggle dropdown on tap/click of the ▾ button
-  document.querySelectorAll('.dropdown-toggle').forEach((btn) => {
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const li = btn.closest('li');
-      const isOpen = li.classList.contains('dropdown-open');
-      // Close all open dropdowns first
-      document.querySelectorAll('li.dropdown-open').forEach((el) =>
-        el.classList.remove('dropdown-open')
-      );
-      if (!isOpen) {
-        li.classList.add('dropdown-open');
-        btn.setAttribute('aria-expanded', 'true');
-      } else {
-        btn.setAttribute('aria-expanded', 'false');
+  const expertiseLi = document.querySelector('li.group');
+  if (expertiseLi) {
+    const parentLink = expertiseLi.querySelector('a');
+
+    parentLink.addEventListener('click', function (e) {
+      if (window.matchMedia('(hover: none)').matches) {
+        if (!expertiseLi.classList.contains('dropdown-open')) {
+          e.preventDefault();
+          expertiseLi.classList.add('dropdown-open');
+        }
       }
     });
-  });
 
-  // Close when tapping anywhere outside
-  document.addEventListener('click', () => {
-    document.querySelectorAll('li.dropdown-open').forEach((el) =>
-      el.classList.remove('dropdown-open')
-    );
-    document.querySelectorAll('.dropdown-toggle').forEach((btn) =>
-      btn.setAttribute('aria-expanded', 'false')
-    );
-  });
+    document.addEventListener('click', function (e) {
+      if (!expertiseLi.contains(e.target)) {
+        expertiseLi.classList.remove('dropdown-open');
+      }
+    });
+  }
 </script>
