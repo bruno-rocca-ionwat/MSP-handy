@@ -3,15 +3,15 @@
 ---
 
 <svg
-    width="220"
+    width="240"
     height="50"
-    viewBox="0 0 220 50"
+    viewBox="0 0 240 50"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
     role="img"
     aria-label="HandyMSP"
 >
-    <g clip-path="url(#clip0_msp3)">
+    <g clip-path="url(#clip0_msp_final)">
         <!-- Minneapolis Skyline (solid filled) -->
         <rect x="0" y="39" width="4" height="11" fill="#fff"></rect>
         <rect x="5" y="33" width="5" height="17" fill="#fff"></rect>
@@ -23,8 +23,9 @@
         <rect x="32" y="28" width="6" height="22" fill="#fff"></rect>
         <rect x="39" y="35" width="4" height="15" fill="#fff"></rect>
 
-        <!-- Stone Arch Bridge – arches below roadway (sweep=0 bows upward, opening faces river) -->
-        <!-- Deck / roadway -->
+        <!-- Stone Arch Bridge (line drawing) -->
+        <!-- gap x=43–45 = the Mississippi River -->
+        <!-- Deck -->
         <line x1="46" y1="36" x2="79" y2="36" stroke="#fff" stroke-width="1.5"></line>
         <!-- Left abutment -->
         <line x1="46" y1="36" x2="46" y2="49" stroke="#fff" stroke-width="1.5"></line>
@@ -34,16 +35,16 @@
         <line x1="68" y1="36" x2="68" y2="49" stroke="#fff" stroke-width="1.5"></line>
         <!-- Right abutment -->
         <line x1="79" y1="36" x2="79" y2="49" stroke="#fff" stroke-width="1.5"></line>
-        <!-- Arch 1 – springs at y=44, crowns near y=37 -->
-        <path d="M46,44 A5.5,7 0 0 0 57,44" stroke="#fff" stroke-width="1.2" fill="none"></path>
+        <!-- Arch 1 – sweep=1 bows upward (∩), opening faces the river below -->
+        <path d="M46,44 A5.5,7 0 0 1 57,44" stroke="#fff" stroke-width="1.2" fill="none"></path>
         <!-- Arch 2 -->
-        <path d="M57,44 A5.5,7 0 0 0 68,44" stroke="#fff" stroke-width="1.2" fill="none"></path>
+        <path d="M57,44 A5.5,7 0 0 1 68,44" stroke="#fff" stroke-width="1.2" fill="none"></path>
         <!-- Arch 3 -->
-        <path d="M68,44 A5.5,7 0 0 0 79,44" stroke="#fff" stroke-width="1.2" fill="none"></path>
+        <path d="M68,44 A5.5,7 0 0 1 79,44" stroke="#fff" stroke-width="1.2" fill="none"></path>
         <!-- River / water line -->
         <line x1="46" y1="49" x2="79" y2="49" stroke="#fff" stroke-width="1"></line>
 
-        <!-- Wordmark – all caps, baseline bottom-aligned -->
+        <!-- Wordmark – all caps, bottom-aligned -->
         <text
             x="85"
             y="48"
@@ -55,8 +56,8 @@
         >HANDY MSP</text>
     </g>
     <defs>
-        <clipPath id="clip0_msp3">
-            <rect width="220" height="50" fill="white"></rect>
+        <clipPath id="clip0_msp_final">
+            <rect width="240" height="50" fill="white"></rect>
         </clipPath>
     </defs>
 </svg>
