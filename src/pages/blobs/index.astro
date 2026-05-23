@@ -7,21 +7,12 @@ import { uploadDisabled } from '../../utils';
 const explainer = `
 Step 1: Fill out field below. </br>
 Step 2: CREATE your unique JOB NUMBER (ex prospective-fly-474)</br>
-Step 3: PASTE this number into last filed of form below</br>
-Step 4: RECEIVE a QUOTE with 5 minutes</br>
-`;
-
-const uploadDisabledText = `
-User uploads are disabled in this site. To run your own and try it out: 
-<a href="https://app.netlify.com/start/deploy?repository=https://github.com/netlify-templates/astro-platform-starter">
-<img src="https://www.netlify.com/img/deploy/button.svg" style="display: inline;" alt="Deploy to Netlify" />
-</a>
+Step 3: PASTE this number into last field of form below</br>
+Step 4: RECEIVE a QUOTE within 5 minutes</br>
 `;
 ---
-
 <Layout title="Blobs">
   <h1 class="mb-10">FAST QUOTE: Get Help NOW</h1>
-
   <Markdown content={explainer} class="mb-12" />
 
   <!-- Netlify form -->
@@ -30,10 +21,11 @@ User uploads are disabled in this site. To run your own and try it out:
     method="POST"
     enctype="multipart/form-data"
     data-netlify="true"
+    netlify
     class="mb-12 max-w-xl space-y-6"
   >
-    <!-- required for Netlify form detection -->
-    <input type="hidden" name="form-name" value="contact" />
+    <!-- form-name value MUST exactly match the form's name attribute -->
+    <input type="hidden" name="form-name" value="contact1" />
 
     <p class="space-y-2">
       <label class="block font-semibold">
@@ -51,21 +43,23 @@ User uploads are disabled in this site. To run your own and try it out:
         Mobile
         <input
           type="tel"
-          name="Mobile"
+          name="mobile"
           class="mt-2 block w-full rounded border border-white/20 bg-white/10 px-3 py-2 text-white"
         />
       </label>
     </p>
+
     <p class="space-y-2">
       <label class="block font-semibold">
         First Name
         <input
           type="text"
-          name="First Name"
+          name="first-name"
           class="mt-2 block w-full rounded border border-white/20 bg-white/10 px-3 py-2 text-white"
         />
       </label>
     </p>
+
     <p class="space-y-2">
       <label class="block font-semibold">
         Exact Address
@@ -82,16 +76,17 @@ User uploads are disabled in this site. To run your own and try it out:
         Tasks Required
         <input
           type="text"
-          name="Task"
+          name="task"
           class="mt-2 block w-full rounded border border-white/20 bg-white/10 px-3 py-2 text-white"
         />
       </label>
     </p>
+
     <p class="space-y-2">
       <label class="block font-semibold">
         Task Comments
         <textarea
-          name="Comments"
+          name="comments"
           rows="4"
           class="mt-2 block w-full rounded border border-white/20 bg-white/10 px-3 py-2 text-white"
         ></textarea>
@@ -102,15 +97,16 @@ User uploads are disabled in this site. To run your own and try it out:
       <label class="block font-semibold">
         Upload File Description 1
         <input
-          name="fileDescription1"
+          name="file-description-1"
           type="text"
           class="mt-2 block w-full rounded border border-white/20 bg-white/10 px-3 py-2 text-white"
         />
       </label>
     </p>
+
     <p class="space-y-2">
       <label class="block font-semibold">
-        Add file 1
+        Add File 1
         <input
           name="file1"
           type="file"
@@ -124,15 +120,16 @@ User uploads are disabled in this site. To run your own and try it out:
       <label class="block font-semibold">
         Upload File Description 2
         <input
-          name="fileDescription2"
+          name="file-description-2"
           type="text"
           class="mt-2 block w-full rounded border border-white/20 bg-white/10 px-3 py-2 text-white"
         />
       </label>
     </p>
+
     <p class="space-y-2">
       <label class="block font-semibold">
-        Add file 2
+        Add File 2
         <input
           name="file2"
           type="file"
@@ -146,15 +143,16 @@ User uploads are disabled in this site. To run your own and try it out:
       <label class="block font-semibold">
         Upload File Description 3
         <input
-          name="fileDescription3"
+          name="file-description-3"
           type="text"
           class="mt-2 block w-full rounded border border-white/20 bg-white/10 px-3 py-2 text-white"
         />
       </label>
     </p>
+
     <p class="space-y-2">
       <label class="block font-semibold">
-        Add file 3
+        Add File 3
         <input
           name="file3"
           type="file"
@@ -169,7 +167,7 @@ User uploads are disabled in this site. To run your own and try it out:
         Paste Random Job Name Here
         <input
           type="text"
-          name="INQ"
+          name="inq"
           class="mt-2 block w-full rounded border border-white/20 bg-white/10 px-3 py-2 text-white"
         />
       </label>
@@ -182,15 +180,8 @@ User uploads are disabled in this site. To run your own and try it out:
       Submit
     </button>
   </form>
+
   <p class="result"></p>
-
   <ShapeEditor client:load />
-
-  <Markdown
-    content={`
- 
-
-🙂.
-`}
-  />
+  <Markdown content={`🙂`} />
 </Layout>
