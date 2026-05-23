@@ -41,54 +41,64 @@ const navItems = [
           {item.linkText}
         </a>
         {item.children?.length ? (
-          <div
-            class="expertise-dropdown absolute left-0 top-full z-50 mt-3 min-w-56 rounded-md border border-slate-700 bg-black shadow-lg invisible opacity-0 pointer-events-none transition group-hover:visible group-hover:opacity-100 group-hover:pointer-events-auto group-focus-within:visible group-focus-within:opacity-100 group-focus-within:pointer-events-auto"
-          >
-            <ul class="py-2">
-              {item.children.map((child) => (
-                <li>
-                  
-                    href={child.href}
-                    class="block px-4 py-2 text-white hover:bg-slate-800 focus:bg-slate-800"
-                  >
-                    {child.linkText}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
+          <>
+            <div
+              class="
+                absolute left-0 top-full h-3 w-56
+                hidden group-hover:block group-focus-within:block
+              "
+            />
+            <div
+              class="
+                absolute left-0 top-full z-50 mt-3 min-w-56
+                rounded-md border border-slate-700 bg-black shadow-lg
+                invisible opacity-0 pointer-events-none
+                transition
+                group-hover:visible group-hover:opacity-100 group-hover:pointer-events-auto
+                group-focus-within:visible group-focus-within:opacity-100 group-focus-within:pointer-events-auto
+              "
+            >
+              <ul class="py-2">
+                {item.children.map((child) => (
+                  <li>
+                    
+                      href={child.href}
+                      class="block px-4 py-2 text-white hover:bg-slate-800 focus:bg-slate-800"
+                    >
+                      {child.linkText}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </>
         ) : null}
       </li>
     ))}
   </ul>
 </nav>
 
+<script>
+  const li = document.querySelector('li.group');
+  if (li) {
+    li.querySelector('a').addEventListener('click', function(e) {
+      if (!window.matchMedia('(hover: hover)').matches) {
+        if (!li.classList.contains('open')) {
+          e.preventDefault();
+          li.classList.add('open');
+        }
+      }
+    });
+    document.addEventListener('click', function(e) {
+      if (!li.contains(e.target)) li.classList.remove('open');
+    });
+  }
+</script>
+
 <style>
-  li.dropdown-open .expertise-dropdown {
+  li.group.open > div:last-child {
     visibility: visible !important;
     opacity: 1 !important;
     pointer-events: auto !important;
   }
 </style>
-
-<script>
-  const expertiseLi = document.querySelector('li.group');
-  if (expertiseLi) {
-    const parentLink = expertiseLi.querySelector('a');
-
-    parentLink.addEventListener('click', function (e) {
-      if (window.matchMedia('(hover: none)').matches) {
-        if (!expertiseLi.classList.contains('dropdown-open')) {
-          e.preventDefault();
-          expertiseLi.classList.add('dropdown-open');
-        }
-      }
-    });
-
-    document.addEventListener('click', function (e) {
-      if (!expertiseLi.contains(e.target)) {
-        expertiseLi.classList.remove('dropdown-open');
-      }
-    });
-  }
-</script>
