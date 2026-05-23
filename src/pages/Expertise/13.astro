@@ -1,121 +1,160 @@
 ---
-import { Image } from 'astro:assets';
-import corgi from '../../assets/corgi.jpg';
-import Diff from '../../components/Diff.astro';
-import Markdown from '../../components/Markdown.astro';
 import Layout from '../../layouts/Layout.astro';
-
-const sampleImage = '/images/corgi.jpg';
-
-// Compare instead of assigning (your original code was mutating NODE_ENV)
-const forceWebP = process.env.NODE_ENV === 'development';
-
-const sampleImageSrcSet = [640, 1280, 2048]
-    .map((size) => {
-        return `/.netlify/images?url=${sampleImage}&w=${size}${forceWebP ? '&fm=webp' : ''} ${size}w`;
-    })
-    .join(', ');
-const sizes = '(max-width: 1024px) 100vw, 1024px';
-
-const astroImageSnippet = `
-## Using the built-in Astro &lt;Image /&gt; component
-
-Astro's \`Image\` component will automatically use Netlify Image CDN to serve optimized images.
-
-~~~jsx
 ---
-import { Image } from 'astro:assets';
-import corgi from '../assets/corgi.jpg';
----
-// Later in your markup...
-<Image src={corgi} alt="Corgi" /* ... additional props */ />
-~~~
-`;
-
-const originalVsCdnSnippet = `
-## Original vs. optimized image: can you tell the difference?
-
-In the code below, a regular \`<img>\` tag is used in both cases for a framework-agnostic example. 
-Note that aside from Astro's \`Image\` or rolling your own \`<img>\` tags, you can also use the excellent [unpic-img](https://unpic.pics/) package.
-
-~~~jsx
-// <== On the left, the original image
-<img src="/images/corgi.jpg" alt="Corgi" />
-
-// ==> On the right, explicitly using Netlify Image CDN endpoint for a responsive image
-<img 
-  srcSet="${sampleImageSrcSet}"
-  sizes="${sizes}" 
-  alt="Corgi" 
-/>
-~~~
-`;
-
-const devModeWarning = `
-In local development, optimization is performed locally without automatic format
-detection, so format is set to WebP.
-`;
----
-
-<Layout title="Kitchen Stove/Oven/Small Appliance Repair">
+<Layout title="Stove, Oven & Kitchen Appliance Repair Twin Cities | HandyMSP">
     <div class="flex flex-col gap-12 sm:gap-16">
-        <section>
-            <h1>Kitchen Stove/Oven/Small Appliance Repair</h1>
-        </section>
-        <section>
-            <Markdown content={astroImageSnippet} class="mb-8" />
-            <figure>
-                <Image src={corgi} alt="Corgi" class="border-2 border-white rounded-lg" />
-                <figcaption class="mt-2 text-sm italic">
-                    Credit: photo by <a href="https://unsplash.com/@alvannee">Alvan Nee</a> on
-                    <a href="https://unsplash.com/photos/long-coated-white-and-brown-dog-lvFlpqEvuRM"> Unsplash </a>
-                </figcaption>
-            </figure>
-        </section>
-        <section>
-            <Markdown content={originalVsCdnSnippet} class="mb-8" />
-            <Diff class="border-2 border-white rounded-lg image-diff aspect-3/2">
-                <Fragment slot="item-1">
-                    <div>
-                        <div class="relative">
-                            <span class="hidden absolute py-1.5 px-2.5 text-sm rounded-md bg-gray-900/70 top-2.5 left-2.5"></span>
-                            <img src={sampleImage} alt="Corgi" />
-                        </div>
-                    </div>
-                </Fragment>
-                <Fragment slot="item-2">
-                    <div>
-                        <div class="relative">
-                            <span class="hidden absolute py-1.5 px-2.5 text-sm rounded-md bg-gray-900/70 top-2.5 right-2.5"></span>
 
-                            <img srcset={sampleImageSrcSet} alt="Corgi" />
-                        </div>
-                    </div>
-                </Fragment>
-            </Diff>
+        <!-- HERO -->
+        <section class="rounded-xl bg-gradient-to-br from-slate-800 to-slate-900 p-8 sm:p-12 text-center border border-slate-700">
+            <p class="text-blue-400 font-semibold text-sm uppercase tracking-widest mb-3">
+                Minneapolis &amp; Twin Cities Suburbs
+            </p>
+            <h1 class="text-3xl sm:text-4xl font-bold text-white mb-4">
+                Get Your Kitchen Working Again
+            </h1>
+            <p class="text-lg text-slate-300 mb-8 max-w-2xl mx-auto">
+                Stove, oven, and kitchen appliance repair across the Twin Cities — same-week service, most repairs in one visit.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="#quote"
+                   class="inline-block bg-blue-600 hover:bg-blue-500 text-white font-bold px-8 py-4 rounded-lg text-lg transition">
+                    Book Same-Week Kitchen Repair
+                </a>
+                <a href="tel:7609721009"
+                   class="inline-block bg-white hover:bg-slate-100 text-slate-900 font-bold px-8 py-4 rounded-lg text-lg transition">
+                    &#128222; 760-972-1009
+                </a>
+            </div>
         </section>
+
+        <!-- PAIN POINTS -->
+        <section>
+            <h2 class="text-2xl font-bold text-white mb-8 text-center">Sound Familiar?</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                <div class="bg-slate-800 rounded-xl p-6 border border-slate-700">
+                    <h3 class="font-bold text-white text-lg mb-2">Burner won't light, oven won't heat</h3>
+                    <p class="text-slate-300 text-sm leading-relaxed">Gas igniter issues, electric heating element failures, and thermostat problems are the most common repairs. We stock common parts for same-visit fixes.</p>
+                </div>
+                <div class="bg-slate-800 rounded-xl p-6 border border-slate-700">
+                    <h3 class="font-bold text-white text-lg mb-2">Don't buy new — repair first</h3>
+                    <p class="text-slate-300 text-sm leading-relaxed">A new range costs $600–$2,000. A faulty igniter or bake element is a fraction of that. We give you an honest assessment so you can decide.</p>
+                </div>
+                <div class="bg-slate-800 rounded-xl p-6 border border-slate-700">
+                    <h3 class="font-bold text-white text-lg mb-2">Small appliances and full kitchen too</h3>
+                    <p class="text-slate-300 text-sm leading-relaxed">Dishwasher not draining? Hood vent not working? Garbage disposal jammed? We handle the full kitchen — not just the big appliances.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- WHY HANDYMSP -->
+        <section class="bg-slate-800 rounded-xl p-8 border border-slate-700">
+            <h2 class="text-2xl font-bold text-white mb-6 text-center">
+                Why Twin Cities Homeowners Choose HandyMSP
+            </h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="flex items-start gap-3">
+                    <span class="text-green-400 font-bold text-lg flex-shrink-0">&#10003;</span>
+                    <p class="text-slate-300 text-sm leading-relaxed">Serving Edina, Eden Prairie, Minnetonka, Plymouth, Wayzata, Hopkins, St. Louis Park, Bloomington, Burnsville, Eagan, Woodbury, Maple Grove &amp; all Twin Cities suburbs</p>
+                </div>
+                <div class="flex items-start gap-3">
+                    <span class="text-green-400 font-bold text-lg flex-shrink-0">&#10003;</span>
+                    <p class="text-slate-300 text-sm leading-relaxed">Licensed, insured &amp; background-checked technicians</p>
+                </div>
+                <div class="flex items-start gap-3">
+                    <span class="text-green-400 font-bold text-lg flex-shrink-0">&#10003;</span>
+                    <p class="text-slate-300 text-sm leading-relaxed">Same-week appointments available</p>
+                </div>
+                <div class="flex items-start gap-3">
+                    <span class="text-green-400 font-bold text-lg flex-shrink-0">&#10003;</span>
+                    <p class="text-slate-300 text-sm leading-relaxed">100% satisfaction guarantee — or we make it right</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- WHAT WE HANDLE -->
+        <section>
+            <h2 class="text-2xl font-bold text-white mb-6">What We Handle</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div class="flex items-start gap-3 bg-slate-800 rounded-lg p-3 border border-slate-700">
+                    <span class="text-blue-400 font-bold flex-shrink-0">&#10003;</span>
+                    <span class="text-slate-300 text-sm">Gas and electric stove burner repair</span>
+                </div>
+                <div class="flex items-start gap-3 bg-slate-800 rounded-lg p-3 border border-slate-700">
+                    <span class="text-blue-400 font-bold flex-shrink-0">&#10003;</span>
+                    <span class="text-slate-300 text-sm">Oven not heating or heating unevenly</span>
+                </div>
+                <div class="flex items-start gap-3 bg-slate-800 rounded-lg p-3 border border-slate-700">
+                    <span class="text-blue-400 font-bold flex-shrink-0">&#10003;</span>
+                    <span class="text-slate-300 text-sm">Range hood and vent repair</span>
+                </div>
+                <div class="flex items-start gap-3 bg-slate-800 rounded-lg p-3 border border-slate-700">
+                    <span class="text-blue-400 font-bold flex-shrink-0">&#10003;</span>
+                    <span class="text-slate-300 text-sm">Dishwasher repair (not draining, not cleaning, leaking)</span>
+                </div>
+                <div class="flex items-start gap-3 bg-slate-800 rounded-lg p-3 border border-slate-700">
+                    <span class="text-blue-400 font-bold flex-shrink-0">&#10003;</span>
+                    <span class="text-slate-300 text-sm">Garbage disposal repair and replacement</span>
+                </div>
+                <div class="flex items-start gap-3 bg-slate-800 rounded-lg p-3 border border-slate-700">
+                    <span class="text-blue-400 font-bold flex-shrink-0">&#10003;</span>
+                    <span class="text-slate-300 text-sm">Microwave and small appliance diagnostics</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- TESTIMONIAL -->
+        <section class="border-l-4 border-blue-500 pl-6 py-2">
+            <blockquote class="text-slate-200 text-lg italic mb-2">
+                "Oven stopped working the week before Thanksgiving. HandyMSP came the next day, replaced the bake element, and it's been perfect ever since." — Karen W., Hopkins
+            </blockquote>
+        </section>
+
+        <!-- LEAD FORM -->
+        <section id="quote" class="bg-slate-800 rounded-xl p-8 sm:p-10 border border-slate-700">
+            <h2 class="text-2xl font-bold text-white mb-1">Schedule Your Kitchen Appliance Repair</h2>
+            <p class="text-slate-400 mb-6">Free visit. No obligation. Same-week scheduling available.</p>
+            <form name="kitchenappliancerepair" method="POST" data-netlify="true" class="flex flex-col gap-4">
+                <input type="hidden" name="form-name" value="kitchenappliancerepair" />
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <input type="text"  name="name"  placeholder="Your Name"     required
+                           class="bg-slate-700 border border-slate-600 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-blue-500" />
+                    <input type="tel"   name="phone" placeholder="Phone Number"  required
+                           class="bg-slate-700 border border-slate-600 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-blue-500" />
+                </div>
+                <input type="email" name="email"   placeholder="Email Address"   required
+                       class="bg-slate-700 border border-slate-600 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-blue-500" />
+                <input type="text"  name="address" placeholder="Service Address (City + Zip)"
+                       class="bg-slate-700 border border-slate-600 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-blue-500" />
+                <textarea name="description" placeholder="Describe what needs to be done..." rows="3" required
+                          class="bg-slate-700 border border-slate-600 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-blue-500 resize-none"></textarea>
+                <select name="best-time"
+                        class="bg-slate-700 border border-slate-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500">
+                    <option value="">Best time to call</option>
+                    <option value="morning">Morning (7am&#8211;12pm)</option>
+                    <option value="afternoon">Afternoon (12pm&#8211;5pm)</option>
+                    <option value="evening">Evening (5pm&#8211;7pm)</option>
+                </select>
+                <button type="submit"
+                        class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 px-8 rounded-lg text-lg transition self-start">
+                    Schedule My Free Visit &#8594;
+                </button>
+            </form>
+        </section>
+
+        <!-- SECONDARY CTA -->
+        <section class="text-center py-8 border-t border-slate-700">
+            <h2 class="text-xl font-bold text-white mb-3">Can't cook? Don't wait. Call us now.</h2>
+            <a href="tel:7609721009"
+               class="text-2xl font-bold text-blue-400 hover:text-blue-300 transition">
+                760-972-1009
+            </a>
+            <p class="text-slate-400 mt-1">Available Mon&#8211;Sat, 7am&#8211;7pm</p>
+            <p class="text-slate-500 text-sm mt-6">
+                Serving Edina, Eden Prairie, Minnetonka, Plymouth, Wayzata, Hopkins,
+                St.&nbsp;Louis Park, Bloomington, Burnsville, Eagan, Woodbury, Maple Grove
+                &amp; all Twin Cities suburbs.
+            </p>
+        </section>
+
     </div>
 </Layout>
-
-<script>
-    const images = document.querySelectorAll<HTMLImageElement>('.image-diff img');
-
-    images.forEach((image) => {
-        if (image.complete) {
-            showImageSize(image);
-        } else {
-            image.addEventListener('load', () => {
-                showImageSize(image);
-            });
-        }
-    });
-
-    function showImageSize(image: HTMLImageElement) {
-        const imageEntry = window?.performance?.getEntriesByName(image.currentSrc)?.[0] as PerformanceResourceTiming;
-        if (imageEntry && imageEntry.encodedBodySize) {
-            const imageOverlay = image.previousElementSibling;
-            imageOverlay.classList.remove('hidden');
-            imageOverlay.textContent = `Size: ${Math.ceil(imageEntry.encodedBodySize / 1024)}KB`;
-        }
-    }
-</script>
