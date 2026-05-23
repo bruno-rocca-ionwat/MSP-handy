@@ -28,6 +28,7 @@ User uploads are disabled in this site. To run your own and try it out:
   <form
     name="contact"
     method="POST"
+    enctype="multipart/form-data"
     data-netlify="true"
     class="mb-12 max-w-xl space-y-6"
   >
@@ -60,7 +61,7 @@ User uploads are disabled in this site. To run your own and try it out:
       <label class="block font-semibold">
         Mobile
         <input
-          type="Mobile"
+          type="tel"
           name="Mobile"
           class="mt-2 block w-full rounded border border-white/20 bg-white/10 px-3 py-2 text-white"
         />
@@ -70,7 +71,7 @@ User uploads are disabled in this site. To run your own and try it out:
       <label class="block font-semibold">
         First Name
         <input
-          type="First Name"
+          type="text"
           name="First Name"
           class="mt-2 block w-full rounded border border-white/20 bg-white/10 px-3 py-2 text-white"
         />
@@ -80,7 +81,7 @@ User uploads are disabled in this site. To run your own and try it out:
       <label class="block font-semibold">
         Exact Address
         <input
-          type="address"
+          type="text"
           name="address"
           class="mt-2 block w-full rounded border border-white/20 bg-white/10 px-3 py-2 text-white"
         />
@@ -91,7 +92,7 @@ User uploads are disabled in this site. To run your own and try it out:
       <label class="block font-semibold">
         Tasks Required
         <input
-          type="Task"
+          type="text"
           name="Task"
           class="mt-2 block w-full rounded border border-white/20 bg-white/10 px-3 py-2 text-white"
         />
@@ -100,73 +101,104 @@ User uploads are disabled in this site. To run your own and try it out:
     <p class="space-y-2">
       <label class="block font-semibold">
         Task Comments
-        <input
-          type="Comments"
+        <textarea
           name="Comments"
+          rows="4"
+          class="mt-2 block w-full rounded border border-white/20 bg-white/10 px-3 py-2 text-white"
+        ></textarea>
+      </label>
+    </p>
+
+    <p class="space-y-2">
+      <label class="block font-semibold">
+        Upload File Description 1
+        <input
+          name="fileDescription1"
+          type="text"
           class="mt-2 block w-full rounded border border-white/20 bg-white/10 px-3 py-2 text-white"
         />
       </label>
     </p>
-<form name="fileForm" enctype="multipart/form-data" data-netlify="true">
-  <p>
-    <label>
-      <span>Upload File Description:</span>
-      <input name="name" type="text" />
-    </label>
-  </p>
-  <p>
-    <label>
-      <span>Add file:</span>
-      <input name="file" type="file" />
-    </label>
-  </p>
+    <p class="space-y-2">
+      <label class="block font-semibold">
+        Add file 1
+        <input
+          name="file1"
+          type="file"
+          accept="image/*"
+          class="mt-2 block w-full text-white file:mr-4 file:rounded file:border file:border-white/20 file:bg-white/10 file:px-3 file:py-2 file:text-white"
+        />
+      </label>
+    </p>
 
-  <p>
-    <label>
-      <span>Upload File Description:</span>
-      <input name="name" type="text" />
-    </label>
-  </p>
-  <p>
-    <label>
-      <span>Add file:</span>
-      <input name="file" type="file" />
-    </label>
-  </p>
+    <p class="space-y-2">
+      <label class="block font-semibold">
+        Upload File Description 2
+        <input
+          name="fileDescription2"
+          type="text"
+          class="mt-2 block w-full rounded border border-white/20 bg-white/10 px-3 py-2 text-white"
+        />
+      </label>
+    </p>
+    <p class="space-y-2">
+      <label class="block font-semibold">
+        Add file 2
+        <input
+          name="file2"
+          type="file"
+          accept="image/*"
+          class="mt-2 block w-full text-white file:mr-4 file:rounded file:border file:border-white/20 file:bg-white/10 file:px-3 file:py-2 file:text-white"
+        />
+      </label>
+    </p>
 
-  <p>
-    <label>
-      <span>Upload File Description:</span>
-      <input name="name" type="text" />
-    </label>
-  </p>
-  <p>
-    <label>
-      <span>Add file:</span>
-      <input name="file" type="file" />
-    </label>
-  </p>
+    <p class="space-y-2">
+      <label class="block font-semibold">
+        Upload File Description 3
+        <input
+          name="fileDescription3"
+          type="text"
+          class="mt-2 block w-full rounded border border-white/20 bg-white/10 px-3 py-2 text-white"
+        />
+      </label>
+    </p>
+    <p class="space-y-2">
+      <label class="block font-semibold">
+        Add file 3
+        <input
+          name="file3"
+          type="file"
+          accept="image/*"
+          class="mt-2 block w-full text-white file:mr-4 file:rounded file:border file:border-white/20 file:bg-white/10 file:px-3 file:py-2 file:text-white"
+        />
+      </label>
+    </p>
 
-  <button>Submit</button>
-</form>
-<p class="result"></p>
+    <button
+      type="submit"
+      class="rounded border border-white/40 px-6 py-2 font-semibold text-white transition hover:border-white hover:bg-white/10"
+    >
+      Submit
+    </button>
+  </form>
+  <p class="result"></p>
 
   <ShapeEditor client:load />
 
-const explainer = `
+  <Markdown
+    content={`
 Step 1:  Click RANDOMIZE then click UPLOAD. Your place in line is set. 
 Step 2: COPY your unique JOB NUMBER (ex prospective-fly-474)
 Step 3: PASTE this into form below
 Step 4: RECEIVE a QUOTE with 5 minutes
-
-
 
 In the body of your text or email, please copy this format and state 
 
 A: the task, tasks that need to be done</br>
 B: the exact location</br>
 
-
 🙂.
-`;
+`}
+  />
 </Layout>
