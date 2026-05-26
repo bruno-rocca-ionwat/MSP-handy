@@ -65,8 +65,8 @@ Having the right team keeps your ratings high and the income coming in - learn m
         </div>
         {weeklyImages.length > 1 && (
           <>
-            <button id="c1-prev" aria-label="Previous photo" class="carousel-btn absolute left-3 top-1/2 -translate-y-1/2">‹</button>
-            <button id="c1-next" aria-label="Next photo"     class="carousel-btn absolute right-3 top-1/2 -translate-y-1/2">›</button>
+            <button id="c1-prev" aria-label="Previous photo" class="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center text-2xl font-bold leading-none text-white bg-black/50 hover:bg-black/75 backdrop-blur-sm transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white">‹</button>
+            <button id="c1-next" aria-label="Next photo"     class="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center text-2xl font-bold leading-none text-white bg-black/50 hover:bg-black/75 backdrop-blur-sm transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white">›</button>
             <div id="c1-dots" class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2 flex-wrap justify-center max-w-xs" role="tablist" aria-label="Select photo">
               {weeklyImages.map((_, i) => (
                 <button role="tab" data-idx={String(i)} aria-label={`Photo ${i + 1}`} aria-selected={String(i === 0)}
@@ -94,8 +94,8 @@ Having the right team keeps your ratings high and the income coming in - learn m
         </div>
         {caulkingImages.length > 1 && (
           <>
-            <button id="c2-prev" aria-label="Previous photo" class="carousel-btn absolute left-3 top-1/2 -translate-y-1/2">‹</button>
-            <button id="c2-next" aria-label="Next photo"     class="carousel-btn absolute right-3 top-1/2 -translate-y-1/2">›</button>
+            <button id="c2-prev" aria-label="Previous photo" class="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center text-2xl font-bold leading-none text-white bg-black/50 hover:bg-black/75 backdrop-blur-sm transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white">‹</button>
+            <button id="c2-next" aria-label="Next photo"     class="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center text-2xl font-bold leading-none text-white bg-black/50 hover:bg-black/75 backdrop-blur-sm transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white">›</button>
             <div id="c2-dots" class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2 flex-wrap justify-center max-w-xs" role="tablist" aria-label="Select photo">
               {caulkingImages.map((_, i) => (
                 <button role="tab" data-idx={String(i)} aria-label={`Photo ${i + 1}`} aria-selected={String(i === 0)}
@@ -109,16 +109,6 @@ Having the right team keeps your ratings high and the income coming in - learn m
     </section>
   )}
 </Layout>
-
-<style>
-  .carousel-btn {
-    @apply w-10 h-10 rounded-full flex items-center justify-center
-           text-2xl font-bold leading-none text-white
-           bg-black/50 hover:bg-black/75 backdrop-blur-sm
-           transition-colors duration-200
-           focus-visible:outline focus-visible:outline-2 focus-visible:outline-white;
-  }
-</style>
 
 <script>
   /**
