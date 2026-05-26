@@ -40,6 +40,20 @@ const caulkingImages = Object.entries(caulkingRaw)
   }))
   .slice(0, 50);
 
+// ── Carousel 3: portrait images (mobile 9:16 format) ─────────────────────────
+// Drop any portrait photo into src/assets/portrait files/ and it appears here.
+const portraitRaw = import.meta.glob<{ default: { src: string } }>(
+  '../assets/portrait files/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}',
+  { eager: true }
+);
+
+const portraitImages = Object.entries(portraitRaw)
+  .sort(([a], [b]) => byFilename(a, b))
+  .map(([, mod], i, arr) => ({
+    src:   mod.default.src,
+    label: `Portrait photo ${i + 1} of ${arr.length}`,
+  }));
+
 const explainer = `
 Having the right team keeps your ratings high and the income coming in - learn more.
 `;
@@ -108,6 +122,54 @@ Having the right team keeps your ratings high and the income coming in - learn m
         )}
       </div>
       <p id="c2-counter" class="text-center text-sm opacity-40 mt-3">1 / {caulkingImages.length}</p>
+    </section>
+  )}
+
+  <!-- ── Carousel 3: Portrait Photos ───────────────────────────────────────── -->
+  <!-- Centered, narrow frame locked to 9:16 — optimised for phone-shot images  -->
+  {portraitImages.length > 0 && (
+    <section class="mt-16" aria-label="Portrait photos">
+      <h2 class="text-xl font-semibold mb-6">From the Field</h2>
+
+      <!-- Outer centering wrapper — caps width to a phone-screen column -->
+      <div class="mx-auto w-full max-w-xs sm:max-w-sm">
+
+        <div id="c3-root" class="relative overflow-hidden rounded-2xl bg-white/5 ring-1 ring-white/10 select-none" tabindex="0" aria-roledescription="carousel">
+
+          <!-- Sliding track -->
+          <div id="c3-track" class="flex transition-transform duration-500 ease-in-out will-change-transform" aria-live="polite">
+            {portraitImages.map(({ src, label }, i) => (
+              <div class="min-w-full" role="group" aria-roledescription="slide" aria-label={label} aria-hidden={i !== 0}>
+                <!-- 9:16 aspect-ratio frame — fills perfectly with portrait shots -->
+                <div style="aspect-ratio: 9 / 16; position: relative; overflow: hidden;">
+                  <img
+                    src={src}
+                    alt={label}
+                    style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center top;"
+                    loading={i === 0 ? 'eager' : 'lazy'}
+                    decoding="async"
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {portraitImages.length > 1 && (
+            <>
+              <button id="c3-prev" aria-label="Previous photo" class="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full flex items-center justify-center text-xl font-bold leading-none text-white bg-black/50 hover:bg-black/75 backdrop-blur-sm transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white">‹</button>
+              <button id="c3-next" aria-label="Next photo"     class="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full flex items-center justify-center text-xl font-bold leading-none text-white bg-black/50 hover:bg-black/75 backdrop-blur-sm transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white">›</button>
+              <div id="c3-dots" class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2 flex-wrap justify-center max-w-xs" role="tablist" aria-label="Select photo">
+                {portraitImages.map((_, i) => (
+                  <button role="tab" data-idx={String(i)} aria-label={`Photo ${i + 1}`} aria-selected={String(i === 0)}
+                    class={['dot w-2 h-2 rounded-full transition-all duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white', i === 0 ? 'bg-white scale-125' : 'bg-white/40 hover:bg-white/70'].join(' ')} />
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+
+        <p id="c3-counter" class="text-center text-sm opacity-40 mt-3">1 / {portraitImages.length}</p>
+      </div>
     </section>
   )}
 </Layout>
@@ -179,4 +241,5 @@ Having the right team keeps your ratings high and the income coming in - learn m
 
   initCarousel('c1');
   initCarousel('c2');
+  initCarousel('c3');
 </script>
