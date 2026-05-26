@@ -2,36 +2,38 @@
 import Layout from '../layouts/Layout.astro';
 import Markdown from '../components/Markdown.astro';
 
-// ── Carousel 1: weekly sensor photos ─────────────────────────────────────────
-// Loads sensor1–sensor14 from src/assets/weeklyfiles, sorted numerically.
+// ── Shared helper: natural filename sort ──────────────────────────────────────
+// Sorts by the bare filename (not the full path), using locale-aware numeric
+// ordering so "photo2" comes before "photo10", and any naming convention works.
+function byFilename(pathA: string, pathB: string) {
+  const name = (p: string) => p.split('/').pop() ?? p;
+  return name(pathA).localeCompare(name(pathB), undefined, { numeric: true, sensitivity: 'base' });
+}
+
+// ── Carousel 1: all images in src/assets/weeklyfiles ─────────────────────────
+// Any image file you drop into this folder is picked up automatically on the
+// next Netlify build — no filename convention required.
 const weeklyRaw = import.meta.glob<{ default: { src: string } }>(
-  '../assets/weeklyfiles/sensor*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}',
+  '../assets/weeklyfiles/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}',
   { eager: true }
 );
 
 const weeklyImages = Object.entries(weeklyRaw)
-  .sort(([a], [b]) => {
-    const n = (p: string) => parseInt(p.match(/sensor(\d+)/)?.[1] ?? '0', 10);
-    return n(a) - n(b);
-  })
+  .sort(([a], [b]) => byFilename(a, b))
   .map(([, mod], i, arr) => ({
     src:   mod.default.src,
     label: `Weekly work photo ${i + 1} of ${arr.length}`,
   }));
 
-// ── Carousel 2: caulking technique photos ─────────────────────────────────────
-// Loads caulking1–caulkingN from src/assets/skill files/caulking, sorted numerically.
-// Up to 50 images supported as more are added to the folder.
+// ── Carousel 2: all images in src/assets/skill files/caulking ────────────────
+// Same deal — drop any image in, it appears. Supports up to 50 photos.
 const caulkingRaw = import.meta.glob<{ default: { src: string } }>(
-  '../assets/skill files/caulking/caulking*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}',
+  '../assets/skill files/caulking/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}',
   { eager: true }
 );
 
 const caulkingImages = Object.entries(caulkingRaw)
-  .sort(([a], [b]) => {
-    const n = (p: string) => parseInt(p.match(/caulking(\d+)/)?.[1] ?? '0', 10);
-    return n(a) - n(b);
-  })
+  .sort(([a], [b]) => byFilename(a, b))
   .map(([, mod], i, arr) => ({
     src:   mod.default.src,
     label: `Caulking technique photo ${i + 1} of ${arr.length}`,
