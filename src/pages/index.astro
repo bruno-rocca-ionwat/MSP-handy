@@ -2,28 +2,41 @@
 import Layout from '../layouts/Layout.astro';
 import Markdown from '../components/Markdown.astro';
 
-/**
- * Load every sensor*.{jpg,jpeg,png,webp} from weeklyfiles, then sort
- * them numerically so sensor1 → sensor2 → … → sensor14 (regardless of extension).
- *
- * import.meta.glob returns ImageMetadata objects when eager:true is set.
- * We pull `.src` (the Vite-processed, cache-busted URL) for each image.
- */
-const rawImports = import.meta.glob<{ default: { src: string; width: number; height: number } }>(
-  '../assets/weeklyfiles/sensor*.{jpg,jpeg,png,webp}',
+// ── Carousel 1: weekly sensor photos ─────────────────────────────────────────
+// Loads sensor1–sensor14 from src/assets/weeklyfiles, sorted numerically.
+const weeklyRaw = import.meta.glob<{ default: { src: string } }>(
+  '../assets/weeklyfiles/sensor*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}',
   { eager: true }
 );
 
-const images: { src: string; label: string }[] = Object.entries(rawImports)
-  .sort(([pathA], [pathB]) => {
-    const numA = parseInt(pathA.match(/sensor(\d+)/)?.[1] ?? '0', 10);
-    const numB = parseInt(pathB.match(/sensor(\d+)/)?.[1] ?? '0', 10);
-    return numA - numB;
+const weeklyImages = Object.entries(weeklyRaw)
+  .sort(([a], [b]) => {
+    const n = (p: string) => parseInt(p.match(/sensor(\d+)/)?.[1] ?? '0', 10);
+    return n(a) - n(b);
   })
-  .map(([path, mod], i) => ({
+  .map(([, mod], i, arr) => ({
     src:   mod.default.src,
-    label: `Weekly work photo ${i + 1} of ${Object.keys(rawImports).length}`,
+    label: `Weekly work photo ${i + 1} of ${arr.length}`,
   }));
+
+// ── Carousel 2: caulking technique photos ─────────────────────────────────────
+// Loads caulking1–caulkingN from src/assets/skill files/caulking, sorted numerically.
+// Up to 50 images supported as more are added to the folder.
+const caulkingRaw = import.meta.glob<{ default: { src: string } }>(
+  '../assets/skill files/caulking/caulking*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}',
+  { eager: true }
+);
+
+const caulkingImages = Object.entries(caulkingRaw)
+  .sort(([a], [b]) => {
+    const n = (p: string) => parseInt(p.match(/caulking(\d+)/)?.[1] ?? '0', 10);
+    return n(a) - n(b);
+  })
+  .map(([, mod], i, arr) => ({
+    src:   mod.default.src,
+    label: `Caulking technique photo ${i + 1} of ${arr.length}`,
+  }))
+  .slice(0, 50);
 
 const explainer = `
 Having the right team keeps your ratings high and the income coming in - learn more.
@@ -38,120 +51,88 @@ Having the right team keeps your ratings high and the income coming in - learn m
     <a href="https://handymsp.com/Learn More" class="btn btn-lg sm:min-w-64">Learn More</a>
   </p>
 
-  <!-- ── Weekly Photo Carousel ───────────────────────────────────────────── -->
-  {images.length > 0 && (
-    <section aria-label="This week's work photos">
+  <!-- ── Carousel 1: This Week's Work ──────────────────────────────────────── -->
+  {weeklyImages.length > 0 && (
+    <section class="mb-16" aria-label="This week's work photos">
       <h2 class="text-xl font-semibold mb-6">This Week's Work</h2>
-
-      <!-- Outer wrapper — clips the sliding track -->
-      <div
-        id="wpc-root"
-        class="relative overflow-hidden rounded-2xl bg-white/5 ring-1 ring-white/10 select-none"
-        tabindex="0"
-        aria-roledescription="carousel"
-      >
-        <!-- Sliding track -->
-        <div
-          id="wpc-track"
-          class="flex transition-transform duration-500 ease-in-out will-change-transform"
-          aria-live="polite"
-        >
-          {images.map(({ src, label }, i) => (
-            <div
-              class="min-w-full"
-              role="group"
-              aria-roledescription="slide"
-              aria-label={label}
-              aria-hidden={i !== 0}
-            >
-              <img
-                src={src}
-                alt={label}
-                class="w-full object-cover"
-                style="max-height: 30rem; object-position: center;"
-                loading={i === 0 ? 'eager' : 'lazy'}
-                decoding="async"
-              />
+      <div id="c1-root" class="relative overflow-hidden rounded-2xl bg-white/5 ring-1 ring-white/10 select-none" tabindex="0" aria-roledescription="carousel">
+        <div id="c1-track" class="flex transition-transform duration-500 ease-in-out will-change-transform" aria-live="polite">
+          {weeklyImages.map(({ src, label }, i) => (
+            <div class="min-w-full" role="group" aria-roledescription="slide" aria-label={label} aria-hidden={i !== 0}>
+              <img src={src} alt={label} class="w-full object-cover" style="max-height: 30rem; object-position: center;" loading={i === 0 ? 'eager' : 'lazy'} decoding="async" />
             </div>
           ))}
         </div>
-
-        <!-- Prev button -->
-        {images.length > 1 && (
-          <button
-            id="wpc-prev"
-            aria-label="Previous photo"
-            class="absolute left-3 top-1/2 -translate-y-1/2
-                   w-10 h-10 rounded-full
-                   flex items-center justify-center
-                   text-2xl font-bold leading-none
-                   bg-black/50 hover:bg-black/75 backdrop-blur-sm text-white
-                   transition-colors duration-200
-                   focus-visible:outline focus-visible:outline-2 focus-visible:outline-white"
-          >
-            ‹
-          </button>
-        )}
-
-        <!-- Next button -->
-        {images.length > 1 && (
-          <button
-            id="wpc-next"
-            aria-label="Next photo"
-            class="absolute right-3 top-1/2 -translate-y-1/2
-                   w-10 h-10 rounded-full
-                   flex items-center justify-center
-                   text-2xl font-bold leading-none
-                   bg-black/50 hover:bg-black/75 backdrop-blur-sm text-white
-                   transition-colors duration-200
-                   focus-visible:outline focus-visible:outline-2 focus-visible:outline-white"
-          >
-            ›
-          </button>
-        )}
-
-        <!-- Dot indicators -->
-        {images.length > 1 && (
-          <div
-            id="wpc-dots"
-            class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2 flex-wrap justify-center max-w-xs"
-            role="tablist"
-            aria-label="Select photo"
-          >
-            {images.map((_, i) => (
-              <button
-                role="tab"
-                data-idx={String(i)}
-                aria-label={`Photo ${i + 1}`}
-                aria-selected={String(i === 0)}
-                class={[
-                  'dot w-2 h-2 rounded-full transition-all duration-300',
-                  'focus-visible:outline focus-visible:outline-2 focus-visible:outline-white',
-                  i === 0 ? 'bg-white scale-125' : 'bg-white/40 hover:bg-white/70',
-                ].join(' ')}
-              />
-            ))}
-          </div>
+        {weeklyImages.length > 1 && (
+          <>
+            <button id="c1-prev" aria-label="Previous photo" class="carousel-btn absolute left-3 top-1/2 -translate-y-1/2">‹</button>
+            <button id="c1-next" aria-label="Next photo"     class="carousel-btn absolute right-3 top-1/2 -translate-y-1/2">›</button>
+            <div id="c1-dots" class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2 flex-wrap justify-center max-w-xs" role="tablist" aria-label="Select photo">
+              {weeklyImages.map((_, i) => (
+                <button role="tab" data-idx={String(i)} aria-label={`Photo ${i + 1}`} aria-selected={String(i === 0)}
+                  class={['dot w-2 h-2 rounded-full transition-all duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white', i === 0 ? 'bg-white scale-125' : 'bg-white/40 hover:bg-white/70'].join(' ')} />
+              ))}
+            </div>
+          </>
         )}
       </div>
+      <p id="c1-counter" class="text-center text-sm opacity-40 mt-3">1 / {weeklyImages.length}</p>
+    </section>
+  )}
 
-      <!-- Photo counter -->
-      <p class="text-center text-sm opacity-40 mt-3" id="wpc-counter">
-        1 / {images.length}
-      </p>
+  <!-- ── Carousel 2: Caulking Techniques ───────────────────────────────────── -->
+  {caulkingImages.length > 0 && (
+    <section aria-label="Caulking technique photos">
+      <h2 class="text-xl font-semibold mb-6">Caulking Techniques</h2>
+      <div id="c2-root" class="relative overflow-hidden rounded-2xl bg-white/5 ring-1 ring-white/10 select-none" tabindex="0" aria-roledescription="carousel">
+        <div id="c2-track" class="flex transition-transform duration-500 ease-in-out will-change-transform" aria-live="polite">
+          {caulkingImages.map(({ src, label }, i) => (
+            <div class="min-w-full" role="group" aria-roledescription="slide" aria-label={label} aria-hidden={i !== 0}>
+              <img src={src} alt={label} class="w-full object-cover" style="max-height: 30rem; object-position: center;" loading={i === 0 ? 'eager' : 'lazy'} decoding="async" />
+            </div>
+          ))}
+        </div>
+        {caulkingImages.length > 1 && (
+          <>
+            <button id="c2-prev" aria-label="Previous photo" class="carousel-btn absolute left-3 top-1/2 -translate-y-1/2">‹</button>
+            <button id="c2-next" aria-label="Next photo"     class="carousel-btn absolute right-3 top-1/2 -translate-y-1/2">›</button>
+            <div id="c2-dots" class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2 flex-wrap justify-center max-w-xs" role="tablist" aria-label="Select photo">
+              {caulkingImages.map((_, i) => (
+                <button role="tab" data-idx={String(i)} aria-label={`Photo ${i + 1}`} aria-selected={String(i === 0)}
+                  class={['dot w-2 h-2 rounded-full transition-all duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white', i === 0 ? 'bg-white scale-125' : 'bg-white/40 hover:bg-white/70'].join(' ')} />
+              ))}
+            </div>
+          </>
+        )}
+      </div>
+      <p id="c2-counter" class="text-center text-sm opacity-40 mt-3">1 / {caulkingImages.length}</p>
     </section>
   )}
 </Layout>
 
+<style>
+  .carousel-btn {
+    @apply w-10 h-10 rounded-full flex items-center justify-center
+           text-2xl font-bold leading-none text-white
+           bg-black/50 hover:bg-black/75 backdrop-blur-sm
+           transition-colors duration-200
+           focus-visible:outline focus-visible:outline-2 focus-visible:outline-white;
+  }
+</style>
+
 <script>
-  (() => {
-    const track   = document.getElementById('wpc-track')   as HTMLElement | null;
-    const root    = document.getElementById('wpc-root')    as HTMLElement | null;
-    const prevBtn = document.getElementById('wpc-prev')    as HTMLButtonElement | null;
-    const nextBtn = document.getElementById('wpc-next')    as HTMLButtonElement | null;
-    const counter = document.getElementById('wpc-counter') as HTMLElement | null;
-    const dots    = document.querySelectorAll<HTMLButtonElement>('#wpc-dots .dot');
-    const slides  = document.querySelectorAll<HTMLElement>('#wpc-track > div');
+  /**
+   * initCarousel — boot one carousel by ID prefix.
+   * Supports any number of carousels on the same page.
+   */
+  function initCarousel(prefix: string) {
+    const track   = document.getElementById(`${prefix}-track`)   as HTMLElement | null;
+    const root    = document.getElementById(`${prefix}-root`)    as HTMLElement | null;
+    const prevBtn = document.getElementById(`${prefix}-prev`)    as HTMLButtonElement | null;
+    const nextBtn = document.getElementById(`${prefix}-next`)    as HTMLButtonElement | null;
+    const counter = document.getElementById(`${prefix}-counter`) as HTMLElement | null;
+    const dots    = document.querySelectorAll<HTMLButtonElement>(`#${prefix}-dots .dot`);
+    const slides  = track ? Array.from(track.children) as HTMLElement[] : [];
 
     if (!track || slides.length <= 1) return;
 
@@ -159,69 +140,51 @@ Having the right team keeps your ratings high and the income coming in - learn m
     let current = 0;
     let timer: ReturnType<typeof setInterval> | undefined;
 
-    /* ── Core navigation ────────────────────────────────────────────── */
     function goTo(index: number) {
       current = ((index % total) + total) % total;
-
-      // Move track
       track!.style.transform = `translateX(-${current * 100}%)`;
-
-      // Update aria-hidden on slides
       slides.forEach((s, i) => s.setAttribute('aria-hidden', String(i !== current)));
-
-      // Update dots
       dots.forEach((d, i) => {
         const active = i === current;
-        d.classList.toggle('bg-white',     active);
-        d.classList.toggle('scale-125',    active);
+        d.classList.toggle('bg-white',    active);
+        d.classList.toggle('scale-125',   active);
         d.classList.toggle('bg-white/40', !active);
         d.setAttribute('aria-selected', String(active));
       });
-
-      // Update counter
       if (counter) counter.textContent = `${current + 1} / ${total}`;
     }
 
-    /* ── Auto-advance ───────────────────────────────────────────────── */
     function startAuto() {
       clearInterval(timer);
       timer = setInterval(() => goTo(current + 1), 5000);
     }
 
-    /* ── Controls ───────────────────────────────────────────────────── */
     prevBtn?.addEventListener('click', () => { goTo(current - 1); startAuto(); });
     nextBtn?.addEventListener('click', () => { goTo(current + 1); startAuto(); });
-
-    dots.forEach(dot =>
-      dot.addEventListener('click', () => {
-        goTo(Number(dot.dataset.idx));
-        startAuto();
-      })
+    dots.forEach(d =>
+      d.addEventListener('click', () => { goTo(Number(d.dataset.idx)); startAuto(); })
     );
 
-    /* ── Keyboard (focus the carousel div to use arrow keys) ────────── */
     root?.addEventListener('keydown', (e: KeyboardEvent) => {
       if (e.key === 'ArrowLeft')  { goTo(current - 1); startAuto(); }
       if (e.key === 'ArrowRight') { goTo(current + 1); startAuto(); }
     });
 
-    /* ── Pause on hover ─────────────────────────────────────────────── */
     root?.addEventListener('mouseenter', () => clearInterval(timer));
     root?.addEventListener('mouseleave', startAuto);
 
-    /* ── Touch / swipe support ──────────────────────────────────────── */
     let touchStartX = 0;
     root?.addEventListener('touchstart', (e: TouchEvent) => {
       touchStartX = e.touches[0].clientX;
     }, { passive: true });
     root?.addEventListener('touchend', (e: TouchEvent) => {
       const diff = touchStartX - e.changedTouches[0].clientX;
-      if (Math.abs(diff) > 40) {
-        goTo(diff > 0 ? current + 1 : current - 1);
-        startAuto();
-      }
+      if (Math.abs(diff) > 40) { goTo(diff > 0 ? current + 1 : current - 1); startAuto(); }
     }, { passive: true });
 
     startAuto();
-  })();
+  }
+
+  initCarousel('c1');
+  initCarousel('c2');
 </script>
