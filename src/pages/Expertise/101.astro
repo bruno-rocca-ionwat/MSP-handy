@@ -1,23 +1,18 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 
-// ── Shared helper: natural filename sort ──────────────────────────────────────
 function byFilename(pathA: string, pathB: string) {
   const name = (p: string) => p.split('/').pop() ?? p;
   return name(pathA).localeCompare(name(pathB), undefined, { numeric: true, sensitivity: 'base' });
 }
 
-// ── Carousel: all images in src/assets/expertise files/101 ───────────────────
-const expertiseRaw = import.meta.glob<{ default: { src: string } }>(
+const raw = import.meta.glob<{ default: { src: string } }>(
   '../../assets/expertise files/101/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}',
   { eager: true }
 );
-const expertiseImages = Object.entries(expertiseRaw)
+const images = Object.entries(raw)
   .sort(([a], [b]) => byFilename(a, b))
-  .map(([, mod], i, arr) => ({
-    src:   mod.default.src,
-    label: `Flooring installation photo ${i + 1} of ${arr.length}`,
-  }));
+  .map(([, mod]) => mod.default.src);
 ---
 <Layout title="Flooring Installation Minneapolis & Twin Cities | HandyMSP">
     <div class="flex flex-col gap-12 sm:gap-16">
@@ -143,32 +138,38 @@ const expertiseImages = Object.entries(expertiseRaw)
         </section>
 
         <!-- PHOTO CAROUSEL -->
-        {expertiseImages.length > 0 && (
-          <section aria-label="Our flooring work photos">
+        {images.length > 0 && (
+          <section>
             <h2 class="text-xl font-semibold text-white mb-6">Our Flooring Work</h2>
-            <div id="c101-root" class="relative overflow-hidden rounded-2xl bg-white/5 ring-1 ring-white/10 select-none" tabindex="0" aria-roledescription="carousel">
-              <div id="c101-track" class="flex transition-transform duration-500 ease-in-out will-change-transform" aria-live="polite">
-                {expertiseImages.map(({ src, label }, i) => (
-                  <div class="min-w-full" role="group" aria-roledescription="slide" aria-label={label} aria-hidden={i !== 0}>
-                    <img src={src} alt={label} class="w-full object-cover" style="max-height: 30rem; object-position: center;" loading={i === 0 ? 'eager' : 'lazy'} decoding="async" />
+            <div id="c101-root" class="relative overflow-hidden rounded-2xl bg-white/5 ring-1 ring-white/10 select-none">
+              <div id="c101-track" class="flex transition-transform duration-500 ease-in-out">
+                {images.map((src, i) => (
+                  <div class="min-w-full">
+                    <img src={src} alt={`Flooring photo ${i + 1}`} class="w-full object-cover" style="max-height:30rem;object-position:center;" loading={i === 0 ? 'eager' : 'lazy'} />
                   </div>
                 ))}
               </div>
-              {expertiseImages.length > 1 && (
-                <>
-                  <button id="c101-prev" aria-label="Previous photo" class="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center text-2xl font-bold leading-none text-white bg-black/50 hover:bg-black/75 backdrop-blur-sm transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white">‹</button>
-                  <button id="c101-next" aria-label="Next photo"     class="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center text-2xl font-bold leading-none text-white bg-black/50 hover:bg-black/75 backdrop-blur-sm transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white">›</button>
-                  <div id="c101-dots" class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2 flex-wrap justify-center max-w-xs" role="tablist" aria-label="Select photo">
-                    {expertiseImages.map((_, i) => (
-                      <button role="tab" data-idx={String(i)} aria-label={`Photo ${i + 1}`} aria-selected={String(i === 0)}
-                        class={['dot w-2 h-2 rounded-full transition-all duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white', i === 0 ? 'bg-white scale-125' : 'bg-white/40 hover:bg-white/70'].join(' ')} />
-                    ))}
-                  </div>
-                </>
-              )}
+              <button id="c101-prev" class="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/50 hover:bg-black/75 text-white text-2xl font-bold flex items-center justify-center">‹</button>
+              <button id="c101-next" class="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/50 hover:bg-black/75 text-white text-2xl font-bold flex items-center justify-center">›</button>
             </div>
-            <p id="c101-counter" class="text-center text-sm opacity-40 mt-3">1 / {expertiseImages.length}</p>
+            <p id="c101-counter" class="text-center text-sm opacity-40 mt-3">1 / {images.length}</p>
           </section>
         )}
 
-        <!-- LEAD
+        <!-- LEAD FORM -->
+        <section id="quote" class="bg-slate-800 rounded-xl p-8 sm:p-10 border border-slate-700">
+            <h2 class="text-2xl font-bold text-white mb-1">Get Your Free Flooring Installation Estimate</h2>
+            <p class="text-slate-400 mb-6">Free visit. No obligation. Same-week scheduling available.</p>
+            <form name="flooring" method="POST" data-netlify="true" class="flex flex-col gap-4">
+                <input type="hidden" name="form-name" value="flooring" />
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <input type="text"  name="name"  placeholder="Your Name"     required
+                           class="bg-slate-700 border border-slate-600 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-blue-500" />
+                    <input type="tel"   name="phone" placeholder="Phone Number"  required
+                           class="bg-slate-700 border border-slate-600 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-blue-500" />
+                </div>
+                <input type="email" name="email"   placeholder="Email Address"   required
+                       class="bg-slate-700 border border-slate-600 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-blue-500" />
+                <input type="text"  name="address" placeholder="Service Address (City + Zip)"
+                       class="bg-slate-700 border border-slate-600 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-blue-500" />
+                <textarea name="description" placeholder="Describe what needs to be done..." rows="3" required
