@@ -1,0 +1,437 @@
+---
+import Layout from '../../layouts/Layout.astro';
+function byFilename(pathA: string, pathB: string) {
+  const name = (p: string) => p.split('/').pop() ?? p;
+  return name(pathA).localeCompare(name(pathB), undefined, { numeric: true, sensitivity: 'base' });
+}
+const raw = import.meta.glob<{ default: { src: string } }>(
+  '../../assets/expertise files/106/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}',
+  { eager: true }
+);
+const images = Object.entries(raw)
+  .sort(([a], [b]) => byFilename(a, b))
+  .map(([, mod]) => mod.default.src);
+---
+<Layout title="Electrical & Lighting Services Minneapolis & Twin Cities | HandyMSP">
+    <div class="flex flex-col gap-12 sm:gap-16">
+        <!-- HERO -->
+        <section class="rounded-xl bg-gradient-to-br from-slate-800 to-slate-900 p-8 sm:p-12 text-center border border-slate-700">
+            <p class="text-blue-400 font-semibold text-sm uppercase tracking-widest mb-3">
+                Minneapolis &amp; Twin Cities Suburbs
+            </p>
+            <h1 class="text-3xl sm:text-4xl font-bold text-white mb-4">
+                Safe, Modern, Beautifully Lit
+            </h1>
+            <p class="text-lg text-slate-300 mb-8 max-w-2xl mx-auto">
+                Licensed electricians for panel upgrades, wiring, lighting, EV chargers, generators, and smart-home installations across the Twin Cities.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="#quote"
+                   class="inline-block bg-blue-600 hover:bg-blue-500 text-white font-bold px-8 py-4 rounded-lg text-lg transition">
+                    Get Your Free Electrical & Lighting Estimate
+                </a>
+                <a href="tel:7609721009"
+                   class="inline-block bg-white hover:bg-slate-100 text-slate-900 font-bold px-8 py-4 rounded-lg text-lg transition">
+                    &#128222; 760-972-1009
+                </a>
+            </div>
+        </section>
+
+        <!-- PAIN POINTS -->
+        <section>
+            <h2 class="text-2xl font-bold text-white mb-8 text-center">Sound Familiar?</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                <div class="bg-slate-800 rounded-xl p-6 border border-slate-700">
+                    <h3 class="font-bold text-white text-lg mb-2">Flickering lights, tripping breakers, dead outlets?</h3>
+                    <p class="text-slate-300 text-sm leading-relaxed">These aren't quirks — they're warnings. Our licensed electricians diagnose the real cause and fix it safely, to code.</p>
+                </div>
+                <div class="bg-slate-800 rounded-xl p-6 border border-slate-700">
+                    <h3 class="font-bold text-white text-lg mb-2">Dated fixtures dragging down the room?</h3>
+                    <p class="text-slate-300 text-sm leading-relaxed">Recessed cans, pendants, chandeliers, under-cabinet, and LED conversions instantly modernize any space.</p>
+                </div>
+                <div class="bg-slate-800 rounded-xl p-6 border border-slate-700">
+                    <h3 class="font-bold text-white text-lg mb-2">Need an EV charger, generator, or panel upgrade?</h3>
+                    <p class="text-slate-300 text-sm leading-relaxed">Newer demands need newer service. We install Level 2 EV chargers, whole-home generators, and upgraded 200A panels.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- WHY HANDYMSP -->
+        <section class="bg-slate-800 rounded-xl p-8 border border-slate-700">
+            <h2 class="text-2xl font-bold text-white mb-6 text-center">
+                Why Twin Cities Homeowners Choose HandyMSP
+            </h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="flex items-start gap-3">
+                    <span class="text-green-400 font-bold text-lg flex-shrink-0">&#10003;</span>
+                    <p class="text-slate-300 text-sm leading-relaxed">Serving Edina, Eden Prairie, Minnetonka, Plymouth, Wayzata, Hopkins, St. Louis Park, Bloomington, Burnsville, Eagan, Woodbury, Maple Grove, and surrounding Twin Cities suburbs</p>
+                </div>
+                <div class="flex items-start gap-3">
+                    <span class="text-green-400 font-bold text-lg flex-shrink-0">&#10003;</span>
+                    <p class="text-slate-300 text-sm leading-relaxed">Licensed, insured &amp; background-checked technicians</p>
+                </div>
+                <div class="flex items-start gap-3">
+                    <span class="text-green-400 font-bold text-lg flex-shrink-0">&#10003;</span>
+                    <p class="text-slate-300 text-sm leading-relaxed">Same-week appointments available</p>
+                </div>
+                <div class="flex items-start gap-3">
+                    <span class="text-green-400 font-bold text-lg flex-shrink-0">&#10003;</span>
+                    <p class="text-slate-300 text-sm leading-relaxed">100% satisfaction guarantee — or we make it right</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- WHAT WE HANDLE -->
+        <section>
+            <h2 class="text-2xl font-bold text-white mb-6">What We Handle</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div class="flex items-start gap-3 bg-slate-800 rounded-lg p-3 border border-slate-700">
+                    <span class="text-blue-400 font-bold flex-shrink-0">&#10003;</span>
+                    <span class="text-slate-300 text-sm">Light fixtures, chandeliers, recessed & LED lighting</span>
+                </div>
+                <div class="flex items-start gap-3 bg-slate-800 rounded-lg p-3 border border-slate-700">
+                    <span class="text-blue-400 font-bold flex-shrink-0">&#10003;</span>
+                    <span class="text-slate-300 text-sm">Ceiling fan installation & repair</span>
+                </div>
+                <div class="flex items-start gap-3 bg-slate-800 rounded-lg p-3 border border-slate-700">
+                    <span class="text-blue-400 font-bold flex-shrink-0">&#10003;</span>
+                    <span class="text-slate-300 text-sm">Outlet, switch & smart switch installation</span>
+                </div>
+                <div class="flex items-start gap-3 bg-slate-800 rounded-lg p-3 border border-slate-700">
+                    <span class="text-blue-400 font-bold flex-shrink-0">&#10003;</span>
+                    <span class="text-slate-300 text-sm">Electrical panel installation & upgrades</span>
+                </div>
+                <div class="flex items-start gap-3 bg-slate-800 rounded-lg p-3 border border-slate-700">
+                    <span class="text-blue-400 font-bold flex-shrink-0">&#10003;</span>
+                    <span class="text-slate-300 text-sm">EV chargers, generators & solar</span>
+                </div>
+                <div class="flex items-start gap-3 bg-slate-800 rounded-lg p-3 border border-slate-700">
+                    <span class="text-blue-400 font-bold flex-shrink-0">&#10003;</span>
+                    <span class="text-slate-300 text-sm">Smoke alarms, security & exterior lighting</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ACCORDION: SERVICE CATEGORIES -->
+        <section>
+            <h2 class="text-2xl font-bold text-white mb-2">All Electrical & Lighting Services</h2>
+            <p class="text-slate-400 mb-6">Click any category below to expand.</p>
+            <div class="flex flex-col gap-3">
+                <details class="group bg-slate-800 rounded-xl border border-slate-700 overflow-hidden">
+                    <summary class="cursor-pointer list-none flex items-center justify-between gap-3 p-5 hover:bg-slate-700/40 transition">
+                        <span class="font-bold text-white text-lg">Interior Lighting</span>
+                        <span class="text-blue-400 text-2xl font-bold flex-shrink-0 transition-transform duration-300 group-open:rotate-45" aria-hidden="true">+</span>
+                    </summary>
+                    <div class="px-5 pb-5 pt-1 border-t border-slate-700">
+                        <ul class="list-disc list-inside space-y-1 pl-1">
+                            <li class="text-slate-300 text-sm">Light Fixture Installation</li>
+                            <li class="text-slate-300 text-sm">Light Fixture Repair</li>
+                            <li class="text-slate-300 text-sm">Chandelier Installation</li>
+                            <li class="text-slate-300 text-sm">Chandelier Repair</li>
+                            <li class="text-slate-300 text-sm">Interior Ceiling Lighting Installation</li>
+                            <li class="text-slate-300 text-sm">Interior Ceiling Lighting Repair</li>
+                            <li class="text-slate-300 text-sm">Recessed Lighting Installation</li>
+                            <li class="text-slate-300 text-sm">Light Fixture Replacement</li>
+                            <li class="text-slate-300 text-sm">Recessed Lighting Repair</li>
+                            <li class="text-slate-300 text-sm">Interior LED Lighting Installation</li>
+                            <li class="text-slate-300 text-sm">LED Interior Light Conversion</li>
+                            <li class="text-slate-300 text-sm">Interior Wall Lighting Installation</li>
+                            <li class="text-slate-300 text-sm">Interior Wall Lighting Repair</li>
+                            <li class="text-slate-300 text-sm">Pendant Installation</li>
+                            <li class="text-slate-300 text-sm">Pendant Repair</li>
+                            <li class="text-slate-300 text-sm">Track Lighting Installation</li>
+                            <li class="text-slate-300 text-sm">Track Lighting Repair</li>
+                            <li class="text-slate-300 text-sm">Fluorescent Lighting Installation</li>
+                            <li class="text-slate-300 text-sm">Fluorescent Lighting Repair</li>
+                            <li class="text-slate-300 text-sm">Under Cabinet Lighting Installation</li>
+                        </ul>
+                    </div>
+                </details>
+                <details class="group bg-slate-800 rounded-xl border border-slate-700 overflow-hidden">
+                    <summary class="cursor-pointer list-none flex items-center justify-between gap-3 p-5 hover:bg-slate-700/40 transition">
+                        <span class="font-bold text-white text-lg">Ceiling Fans</span>
+                        <span class="text-blue-400 text-2xl font-bold flex-shrink-0 transition-transform duration-300 group-open:rotate-45" aria-hidden="true">+</span>
+                    </summary>
+                    <div class="px-5 pb-5 pt-1 border-t border-slate-700">
+                        <ul class="list-disc list-inside space-y-1 pl-1">
+                            <li class="text-slate-300 text-sm">Ceiling Fan Installation</li>
+                            <li class="text-slate-300 text-sm">Ceiling Fan Repair</li>
+                        </ul>
+                    </div>
+                </details>
+                <details class="group bg-slate-800 rounded-xl border border-slate-700 overflow-hidden">
+                    <summary class="cursor-pointer list-none flex items-center justify-between gap-3 p-5 hover:bg-slate-700/40 transition">
+                        <span class="font-bold text-white text-lg">Exterior Lighting</span>
+                        <span class="text-blue-400 text-2xl font-bold flex-shrink-0 transition-transform duration-300 group-open:rotate-45" aria-hidden="true">+</span>
+                    </summary>
+                    <div class="px-5 pb-5 pt-1 border-t border-slate-700">
+                        <ul class="list-disc list-inside space-y-1 pl-1">
+                            <li class="text-slate-300 text-sm">Exterior Lighting Installation</li>
+                            <li class="text-slate-300 text-sm">Security Lighting Installation</li>
+                            <li class="text-slate-300 text-sm">Landscape Lighting Installation</li>
+                            <li class="text-slate-300 text-sm">Exterior Wall Lighting Installation</li>
+                            <li class="text-slate-300 text-sm">Exterior LED Lighting Installation</li>
+                            <li class="text-slate-300 text-sm">Exterior Hanging Light Replacement</li>
+                            <li class="text-slate-300 text-sm">Flood Lighting Installation</li>
+                            <li class="text-slate-300 text-sm">Holiday Lighting Installation</li>
+                            <li class="text-slate-300 text-sm">Christmas Lighting Repair</li>
+                        </ul>
+                    </div>
+                </details>
+                <details class="group bg-slate-800 rounded-xl border border-slate-700 overflow-hidden">
+                    <summary class="cursor-pointer list-none flex items-center justify-between gap-3 p-5 hover:bg-slate-700/40 transition">
+                        <span class="font-bold text-white text-lg">Generators & Solar Power</span>
+                        <span class="text-blue-400 text-2xl font-bold flex-shrink-0 transition-transform duration-300 group-open:rotate-45" aria-hidden="true">+</span>
+                    </summary>
+                    <div class="px-5 pb-5 pt-1 border-t border-slate-700">
+                        <ul class="list-disc list-inside space-y-1 pl-1">
+                            <li class="text-slate-300 text-sm">Generator Installation</li>
+                            <li class="text-slate-300 text-sm">Solar Panel Installation</li>
+                            <li class="text-slate-300 text-sm">EV Charger Installation</li>
+                            <li class="text-slate-300 text-sm">Solar Pool Heater Installation</li>
+                            <li class="text-slate-300 text-sm">Off Grid Solar System Assembly</li>
+                        </ul>
+                    </div>
+                </details>
+                <details class="group bg-slate-800 rounded-xl border border-slate-700 overflow-hidden">
+                    <summary class="cursor-pointer list-none flex items-center justify-between gap-3 p-5 hover:bg-slate-700/40 transition">
+                        <span class="font-bold text-white text-lg">Electrical & Wiring</span>
+                        <span class="text-blue-400 text-2xl font-bold flex-shrink-0 transition-transform duration-300 group-open:rotate-45" aria-hidden="true">+</span>
+                    </summary>
+                    <div class="px-5 pb-5 pt-1 border-t border-slate-700">
+                        <ul class="list-disc list-inside space-y-1 pl-1">
+                            <li class="text-slate-300 text-sm">Electrical Panel Installation</li>
+                            <li class="text-slate-300 text-sm">Electrical Panel Upgrade</li>
+                            <li class="text-slate-300 text-sm">Electrical Panel Repair</li>
+                            <li class="text-slate-300 text-sm">Electrical Wiring Installation</li>
+                            <li class="text-slate-300 text-sm">Electrical Wiring Upgrade</li>
+                            <li class="text-slate-300 text-sm">Outlet Installation</li>
+                            <li class="text-slate-300 text-sm">Outlet Repair</li>
+                            <li class="text-slate-300 text-sm">Meter Socket Installation</li>
+                            <li class="text-slate-300 text-sm">Light Switch Installation</li>
+                            <li class="text-slate-300 text-sm">Smart Light Switch Installation</li>
+                            <li class="text-slate-300 text-sm">Smart Dimmer Installation</li>
+                            <li class="text-slate-300 text-sm">Electronic Setup Services</li>
+                        </ul>
+                    </div>
+                </details>
+                <details class="group bg-slate-800 rounded-xl border border-slate-700 overflow-hidden">
+                    <summary class="cursor-pointer list-none flex items-center justify-between gap-3 p-5 hover:bg-slate-700/40 transition">
+                        <span class="font-bold text-white text-lg">House Fans</span>
+                        <span class="text-blue-400 text-2xl font-bold flex-shrink-0 transition-transform duration-300 group-open:rotate-45" aria-hidden="true">+</span>
+                    </summary>
+                    <div class="px-5 pb-5 pt-1 border-t border-slate-700">
+                        <ul class="list-disc list-inside space-y-1 pl-1">
+                            <li class="text-slate-300 text-sm">Exhaust Fan Installation</li>
+                            <li class="text-slate-300 text-sm">Exhaust Fan Repair</li>
+                            <li class="text-slate-300 text-sm">Bathroom Fan Installation</li>
+                            <li class="text-slate-300 text-sm">Bathroom Fan Repair</li>
+                            <li class="text-slate-300 text-sm">Attic Fan Installation</li>
+                            <li class="text-slate-300 text-sm">Whole House Fan Installation</li>
+                        </ul>
+                    </div>
+                </details>
+                <details class="group bg-slate-800 rounded-xl border border-slate-700 overflow-hidden">
+                    <summary class="cursor-pointer list-none flex items-center justify-between gap-3 p-5 hover:bg-slate-700/40 transition">
+                        <span class="font-bold text-white text-lg">Safety & Security</span>
+                        <span class="text-blue-400 text-2xl font-bold flex-shrink-0 transition-transform duration-300 group-open:rotate-45" aria-hidden="true">+</span>
+                    </summary>
+                    <div class="px-5 pb-5 pt-1 border-t border-slate-700">
+                        <ul class="list-disc list-inside space-y-1 pl-1">
+                            <li class="text-slate-300 text-sm">Smoke Alarm Installation</li>
+                            <li class="text-slate-300 text-sm">Smoke Alarm Repair</li>
+                        </ul>
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <!-- FULL SERVICE LIST -->
+        <section class="bg-slate-800 rounded-xl p-8 border border-slate-700">
+            <h2 class="text-xl font-bold text-white mb-4">Full List of Services We Offer</h2>
+            <ul class="columns-1 sm:columns-2 gap-x-10 list-disc list-inside space-y-1">
+                    <li class="text-slate-300 text-sm">Light Fixture Installation & Repair</li>
+                    <li class="text-slate-300 text-sm">Chandelier Installation</li>
+                    <li class="text-slate-300 text-sm">Recessed & LED Lighting Installation</li>
+                    <li class="text-slate-300 text-sm">Under Cabinet Lighting</li>
+                    <li class="text-slate-300 text-sm">Track & Pendant Lighting</li>
+                    <li class="text-slate-300 text-sm">Exterior & Landscape Lighting</li>
+                    <li class="text-slate-300 text-sm">Holiday Lighting</li>
+                    <li class="text-slate-300 text-sm">Ceiling Fan Installation & Repair</li>
+                    <li class="text-slate-300 text-sm">Electrical Panel Installation, Upgrade & Repair</li>
+                    <li class="text-slate-300 text-sm">Electrical Wiring Installation & Upgrade</li>
+                    <li class="text-slate-300 text-sm">Outlet & Light Switch Installation</li>
+                    <li class="text-slate-300 text-sm">Smart Light Switch & Dimmer Installation</li>
+                    <li class="text-slate-300 text-sm">EV Charger Installation</li>
+                    <li class="text-slate-300 text-sm">Generator Installation</li>
+                    <li class="text-slate-300 text-sm">Solar Panel Installation</li>
+                    <li class="text-slate-300 text-sm">Smoke Alarm Installation & Repair</li>
+            </ul>
+        </section>
+
+        <!-- TESTIMONIAL -->
+        <section class="border-l-4 border-blue-500 pl-6 py-2">
+            <blockquote class="text-slate-200 text-lg italic mb-2">
+                "Panel upgrade plus 14 recessed lights and a new EV charger — clean install, on time, and the electrician explained everything." — Greg L., Eden Prairie
+            </blockquote>
+        </section>
+
+        <!-- PHOTO CAROUSEL -->
+        {images.length > 0 && (
+          <section aria-label="Our electrical and lighting work photos">
+            <h2 class="text-xl font-semibold text-white mb-6">Our Electrical & Lighting Work</h2>
+            <div
+              id="c106-root"
+              class="relative overflow-hidden rounded-2xl bg-white/5 ring-1 ring-white/10 select-none"
+              tabindex="0"
+              aria-roledescription="carousel"
+            >
+              <div
+                id="c106-track"
+                class="flex transition-transform duration-500 ease-in-out will-change-transform"
+                aria-live="polite"
+              >
+                {images.map((src, i) => (
+                  <div
+                    class="min-w-full"
+                    role="group"
+                    aria-roledescription="slide"
+                    aria-label={`Electrical & Lighting photo ${i + 1} of ${images.length}`}
+                    aria-hidden={i !== 0}
+                  >
+                    <img
+                      src={src}
+                      alt={`Electrical & Lighting photo ${i + 1}`}
+                      class="w-full object-cover"
+                      style="max-height: 30rem; object-position: center;"
+                      loading={i === 0 ? 'eager' : 'lazy'}
+                      decoding="async"
+                    />
+                  </div>
+                ))}
+              </div>
+              {images.length > 1 && (
+                <>
+                  <button
+                    id="c106-prev"
+                    aria-label="Previous photo"
+                    class="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/50 hover:bg-black/75 text-white text-2xl font-bold flex items-center justify-center transition"
+                  >
+                    ‹
+                  </button>
+                  <button
+                    id="c106-next"
+                    aria-label="Next photo"
+                    class="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/50 hover:bg-black/75 text-white text-2xl font-bold flex items-center justify-center transition"
+                  >
+                    ›
+                  </button>
+                  <div
+                    id="c106-dots"
+                    class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2 flex-wrap justify-center max-w-xs"
+                    role="tablist"
+                    aria-label="Select photo"
+                  >
+                    {images.map((_, i) => (
+                      <button
+                        role="tab"
+                        data-idx={String(i)}
+                        aria-label={`Photo ${i + 1}`}
+                        aria-selected={String(i === 0)}
+                        class={[
+                          'dot w-2 h-2 rounded-full transition-all duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white',
+                          i === 0 ? 'bg-white scale-125' : 'bg-white/40'
+                        ]}
+                      />
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
+            <p id="c106-counter" class="text-center text-sm opacity-40 mt-3">1 / {images.length}</p>
+          </section>
+        )}
+
+        <!-- LEAD FORM -->
+        <section id="quote" class="bg-slate-800 rounded-xl p-8 sm:p-10 border border-slate-700">
+            <h2 class="text-2xl font-bold text-white mb-1">Get Your Free Electrical & Lighting Estimate</h2>
+            <p class="text-slate-400 mb-6">Free visit. No obligation. Same-week scheduling available.</p>
+            <form name="electrical-lighting" method="POST" data-netlify="true" class="flex flex-col gap-4">
+                <input type="hidden" name="form-name" value="electrical-lighting" />
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <input type="text"  name="name"  placeholder="Your Name"     required
+                           class="bg-slate-700 border border-slate-600 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-blue-500" />
+                    <input type="tel"   name="phone" placeholder="Phone Number"  required
+                           class="bg-slate-700 border border-slate-600 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-blue-500" />
+                </div>
+                <input type="email" name="email" placeholder="Email Address" required
+                       class="bg-slate-700 border border-slate-600 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-blue-500" />
+                <input type="text" name="address" placeholder="Service Address (City + Zip)"
+                       class="bg-slate-700 border border-slate-600 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-blue-500" />
+                <textarea name="description" placeholder="Describe what needs to be done..." rows="3" required
+                          class="bg-slate-700 border border-slate-600 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-blue-500"></textarea>
+                <button type="submit"
+                        class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-8 py-4 rounded-lg text-lg transition">
+                    Get My Free Estimate
+                </button>
+            </form>
+        </section>
+    </div>
+</Layout>
+
+<script>
+  function initCarousel(prefix) {
+    const track = document.getElementById(`${prefix}-track`);
+    const root = document.getElementById(`${prefix}-root`);
+    const prevBtn = document.getElementById(`${prefix}-prev`);
+    const nextBtn = document.getElementById(`${prefix}-next`);
+    const counter = document.getElementById(`${prefix}-counter`);
+    const dots = document.querySelectorAll(`#${prefix}-dots .dot`);
+    const slides = track ? Array.from(track.children) : [];
+    if (!track || slides.length <= 1) return;
+    const total = slides.length;
+    let current = 0;
+    let timer;
+    function goTo(index) {
+      current = ((index % total) + total) % total;
+      track.style.transform = `translateX(-${current * 100}%)`;
+      slides.forEach((s, i) => s.setAttribute('aria-hidden', String(i !== current)));
+      dots.forEach((d, i) => {
+        const active = i === current;
+        d.classList.toggle('bg-white', active);
+        d.classList.toggle('scale-125', active);
+        d.classList.toggle('bg-white/40', !active);
+        d.setAttribute('aria-selected', String(active));
+      });
+      if (counter) counter.textContent = `${current + 1} / ${total}`;
+    }
+    function startAuto() {
+      clearInterval(timer);
+      timer = setInterval(() => goTo(current + 1), 5000);
+    }
+    prevBtn?.addEventListener('click', () => { goTo(current - 1); startAuto(); });
+    nextBtn?.addEventListener('click', () => { goTo(current + 1); startAuto(); });
+    dots.forEach((d) =>
+      d.addEventListener('click', () => { goTo(Number(d.dataset.idx)); startAuto(); })
+    );
+    root?.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') { goTo(current - 1); startAuto(); }
+      if (e.key === 'ArrowRight') { goTo(current + 1); startAuto(); }
+    });
+    root?.addEventListener('mouseenter', () => clearInterval(timer));
+    root?.addEventListener('mouseleave', startAuto);
+    let touchStartX = 0;
+    root?.addEventListener('touchstart', (e) => {
+      touchStartX = e.touches[0].clientX;
+    }, { passive: true });
+    root?.addEventListener('touchend', (e) => {
+      const diff = touchStartX - e.changedTouches[0].clientX;
+      if (Math.abs(diff) > 40) {
+        goTo(diff > 0 ? current + 1 : current - 1);
+        startAuto();
+      }
+    }, { passive: true });
+    startAuto();
+  }
+  initCarousel('c106');
+</script>
