@@ -1,4 +1,6 @@
 ---
+import Layout from '../../layouts/Layout.astro';
+
 /* =========================================================
    EDIT ONLY THIS LIST — title + caption for each image
    ---------------------------------------------------------
@@ -6,10 +8,10 @@
        /src/assets/expertise files/101/
      Filenames are case-sensitive — match them exactly.
    - Each filename has a "title" and a "caption".
-   - The carousel will show the images in alphabetical order
-     of their filenames (same as the folder listing).
-   - To skip an image, leave its title and caption as empty
-     strings "" — no overlay will show.
+   - The carousel shows images in alphabetical order of their
+     filenames (same as the folder listing).
+   - To hide the overlay on an image, set its title and
+     caption to empty strings "".
    ========================================================= */
 
 const texts: Record<string, { title: string; caption: string }> = {
@@ -45,9 +47,9 @@ const texts: Record<string, { title: string; caption: string }> = {
 
 // --- Below this line is the carousel engine — no need to edit ---
 
-function byFilename(a: string, b: string) {
+function byFilename(pathA: string, pathB: string) {
   const name = (p: string) => p.split('/').pop() ?? p;
-  return name(a).localeCompare(name(b), undefined, { numeric: true, sensitivity: 'base' });
+  return name(pathA).localeCompare(name(pathB), undefined, { numeric: true, sensitivity: 'base' });
 }
 
 const raw = import.meta.glob<{ default: { src: string } }>(
@@ -64,156 +66,157 @@ const slides = Object.entries(raw)
   });
 ---
 
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Expertise Carousel — 101</title>
-</head>
-<body>
-
-  <div class="carousel" id="carousel">
-    {slides.map((s, i) => (
-      <div class={"slide" + (i === 0 ? " active" : "")}>
-        <img src={s.src} alt={s.title || s.filename} />
-        {(s.title || s.caption) && (
-          <div class="overlay">
-            {s.title && <h2>{s.title}</h2>}
-            {s.caption && <p>{s.caption}</p>}
+<Layout title="Expertise — Photo Carousel">
+  <div class="flex flex-col gap-12 sm:gap-16">
+    {slides.length > 0 && (
+      <section aria-label="Project photos">
+        <div
+          id="c101text-root"
+          class="relative overflow-hidden rounded-2xl bg-white/5 ring-1 ring-white/10 select-none"
+          tabindex="0"
+          aria-roledescription="carousel"
+        >
+          <div
+            id="c101text-track"
+            class="flex transition-transform duration-500 ease-in-out will-change-transform"
+            aria-live="polite"
+          >
+            {slides.map((s, i) => (
+              <div
+                class="min-w-full relative"
+                role="group"
+                aria-roledescription="slide"
+                aria-label={`Photo ${i + 1} of ${slides.length}`}
+                aria-hidden={i !== 0}
+              >
+                <img
+                  src={s.src}
+                  alt={s.title || s.filename}
+                  class="w-full object-cover"
+                  style="max-height: 30rem; object-position: center;"
+                  loading={i === 0 ? 'eager' : 'lazy'}
+                  decoding="async"
+                />
+                {(s.title || s.caption) && (
+                  <div class="absolute left-0 right-0 bottom-0 px-6 sm:px-8 pt-16 pb-6 bg-gradient-to-t from-black/85 via-black/60 to-transparent text-white pointer-events-none">
+                    {s.title && <h3 class="text-lg sm:text-2xl font-semibold mb-1">{s.title}</h3>}
+                    {s.caption && <p class="text-sm sm:text-base opacity-90 leading-snug">{s.caption}</p>}
+                  </div>
+                )}
+              </div>
+            ))}
           </div>
-        )}
-      </div>
-    ))}
 
-    <button class="nav prev" onclick="change(-1)">&lsaquo;</button>
-    <button class="nav next" onclick="change(1)">&rsaquo;</button>
-    <div class="dots" id="dots"></div>
+          {slides.length > 1 && (
+            <>
+              <button
+                id="c101text-prev"
+                aria-label="Previous photo"
+                class="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/50 hover:bg-black/75 text-white text-2xl font-bold flex items-center justify-center transition"
+              >
+                &lsaquo;
+              </button>
+              <button
+                id="c101text-next"
+                aria-label="Next photo"
+                class="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/50 hover:bg-black/75 text-white text-2xl font-bold flex items-center justify-center transition"
+              >
+                &rsaquo;
+              </button>
+
+              <div
+                id="c101text-dots"
+                class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2 flex-wrap justify-center max-w-xs"
+                role="tablist"
+                aria-label="Select photo"
+              >
+                {slides.map((_, i) => (
+                  <button
+                    role="tab"
+                    data-idx={String(i)}
+                    aria-label={`Photo ${i + 1}`}
+                    aria-selected={String(i === 0)}
+                    class={[
+                      'dot w-2 h-2 rounded-full transition-all duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white',
+                      i === 0 ? 'bg-white scale-125' : 'bg-white/40'
+                    ]}
+                  />
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+        <p id="c101text-counter" class="text-center text-sm opacity-40 mt-3">1 / {slides.length}</p>
+      </section>
+    )}
   </div>
+</Layout>
 
-  <script is:inline>
+<script>
+  function initCarousel(prefix) {
+    const track = document.getElementById(`${prefix}-track`);
+    const root = document.getElementById(`${prefix}-root`);
+    const prevBtn = document.getElementById(`${prefix}-prev`);
+    const nextBtn = document.getElementById(`${prefix}-next`);
+    const counter = document.getElementById(`${prefix}-counter`);
+    const dots = document.querySelectorAll(`#${prefix}-dots .dot`);
+    const slides = track ? Array.from(track.children) : [];
+
+    if (!track || slides.length <= 1) return;
+
+    const total = slides.length;
     let current = 0;
-    const slidesEls = document.querySelectorAll(".slide");
-    const dotsEl = document.getElementById("dots");
+    let timer;
 
-    slidesEls.forEach((_, i) => {
-      const dot = document.createElement("div");
-      dot.className = "dot" + (i === 0 ? " active" : "");
-      dot.onclick = () => goTo(i);
-      dotsEl.appendChild(dot);
+    function goTo(index) {
+      current = ((index % total) + total) % total;
+      track.style.transform = `translateX(-${current * 100}%)`;
+      slides.forEach((s, i) => s.setAttribute('aria-hidden', String(i !== current)));
+      dots.forEach((d, i) => {
+        const active = i === current;
+        d.classList.toggle('bg-white', active);
+        d.classList.toggle('scale-125', active);
+        d.classList.toggle('bg-white/40', !active);
+        d.setAttribute('aria-selected', String(active));
+      });
+      if (counter) counter.textContent = `${current + 1} / ${total}`;
+    }
+
+    function startAuto() {
+      clearInterval(timer);
+      timer = setInterval(() => goTo(current + 1), 5000);
+    }
+
+    prevBtn?.addEventListener('click', () => { goTo(current - 1); startAuto(); });
+    nextBtn?.addEventListener('click', () => { goTo(current + 1); startAuto(); });
+
+    dots.forEach((d) =>
+      d.addEventListener('click', () => { goTo(Number(d.dataset.idx)); startAuto(); })
+    );
+
+    root?.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') { goTo(current - 1); startAuto(); }
+      if (e.key === 'ArrowRight') { goTo(current + 1); startAuto(); }
     });
 
-    function goTo(i) {
-      const dots = document.querySelectorAll(".dot");
-      slidesEls[current].classList.remove("active");
-      dots[current].classList.remove("active");
-      current = (i + slidesEls.length) % slidesEls.length;
-      slidesEls[current].classList.add("active");
-      dots[current].classList.add("active");
-    }
-    function change(dir) { goTo(current + dir); }
+    root?.addEventListener('mouseenter', () => clearInterval(timer));
+    root?.addEventListener('mouseleave', startAuto);
 
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "ArrowLeft") change(-1);
-      if (e.key === "ArrowRight") change(1);
-    });
-  </script>
+    let touchStartX = 0;
+    root?.addEventListener('touchstart', (e) => {
+      touchStartX = e.touches[0].clientX;
+    }, { passive: true });
 
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #111;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
-    .carousel {
-      position: relative;
-      width: 100%;
-      max-width: 900px;
-      aspect-ratio: 16 / 9;
-      overflow: hidden;
-      border-radius: 12px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-      background: #000;
-    }
-    .slide {
-      position: absolute;
-      inset: 0;
-      opacity: 0;
-      transition: opacity 0.6s ease;
-    }
-    .slide.active { opacity: 1; }
-    .slide img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-    .overlay {
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      padding: 60px 32px 28px;
-      background: linear-gradient(
-        to top,
-        rgba(0,0,0,0.85) 0%,
-        rgba(0,0,0,0.6) 50%,
-        rgba(0,0,0,0) 100%
-      );
-      color: #fff;
-    }
-    .overlay h2 {
-      font-size: clamp(18px, 2.4vw, 26px);
-      font-weight: 600;
-      margin-bottom: 6px;
-    }
-    .overlay p {
-      font-size: clamp(13px, 1.6vw, 16px);
-      opacity: 0.9;
-      line-height: 1.4;
-    }
-    .nav {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background: rgba(0,0,0,0.4);
-      color: #fff;
-      border: none;
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      font-size: 22px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.2s;
-    }
-    .nav:hover { background: rgba(0,0,0,0.7); }
-    .nav.prev { left: 16px; }
-    .nav.next { right: 16px; }
-    .dots {
-      position: absolute;
-      bottom: 14px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: 8px;
-      z-index: 2;
-    }
-    .dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.4);
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    .dot.active { background: #fff; }
-  </style>
+    root?.addEventListener('touchend', (e) => {
+      const diff = touchStartX - e.changedTouches[0].clientX;
+      if (Math.abs(diff) > 40) {
+        goTo(diff > 0 ? current + 1 : current - 1);
+        startAuto();
+      }
+    }, { passive: true });
 
-</body>
-</html>
+    startAuto();
+  }
+
+  initCarousel('c101text');
+</script>
