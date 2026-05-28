@@ -7,11 +7,8 @@ import Layout from '../../layouts/Layout.astro';
    - Each KEY (in quotes) is the EXACT filename in:
        /src/assets/expertise files/101/
      Filenames are case-sensitive — match them exactly.
-   - Each filename has a "title" and a "caption".
-   - The carousel shows images in alphabetical order of their
-     filenames (same as the folder listing).
-   - To hide the overlay on an image, set its title and
-     caption to empty strings "".
+   - The carousel shows images in alphabetical order of filename.
+   - To hide overlay on an image, set title and caption to "".
    ========================================================= */
 
 const texts: Record<string, { title: string; caption: string }> = {
@@ -45,7 +42,7 @@ const texts: Record<string, { title: string; caption: string }> = {
 /* ===== END OF EDITABLE SECTION ===== */
 
 
-// --- Below this line is the carousel engine — no need to edit ---
+// --- Carousel engine — no need to edit ---
 
 function byFilename(pathA: string, pathB: string) {
   const name = (p: string) => p.split('/').pop() ?? p;
@@ -64,6 +61,8 @@ const slides = Object.entries(raw)
     const t = texts[filename] ?? { title: "", caption: "" };
     return { src: mod.default.src, filename, title: t.title, caption: t.caption };
   });
+
+const captionsJSON = JSON.stringify(slides.map(s => ({ title: s.title, caption: s.caption })));
 ---
 
 <Layout title="Expertise — Photo Carousel">
@@ -83,7 +82,7 @@ const slides = Object.entries(raw)
           >
             {slides.map((s, i) => (
               <div
-                class="min-w-full relative"
+                class="min-w-full"
                 role="group"
                 aria-roledescription="slide"
                 aria-label={`Photo ${i + 1} of ${slides.length}`}
@@ -94,17 +93,19 @@ const slides = Object.entries(raw)
                   alt={s.title || s.filename}
                   class="w-full object-cover"
                   style="max-height: 30rem; object-position: center;"
-                  loading={i === 0 ? 'eager' : 'lazy'}
+                  loading="eager"
                   decoding="async"
                 />
-                {(s.title || s.caption) && (
-                  <div class="absolute left-0 right-0 bottom-0 px-6 sm:px-8 pt-16 pb-6 bg-gradient-to-t from-black/85 via-black/60 to-transparent text-white pointer-events-none">
-                    {s.title && <h3 class="text-lg sm:text-2xl font-semibold mb-1">{s.title}</h3>}
-                    {s.caption && <p class="text-sm sm:text-base opacity-90 leading-snug">{s.caption}</p>}
-                  </div>
-                )}
               </div>
             ))}
+          </div>
+
+          <div
+            id="c101text-overlay"
+            class="absolute left-0 right-0 bottom-0 px-6 sm:px-8 pt-16 pb-6 bg-gradient-to-t from-black/85 via-black/60 to-transparent text-white pointer-events-none"
+          >
+            <h3 id="c101text-title" class="text-lg sm:text-2xl font-semibold mb-1"></h3>
+            <p id="c101text-caption" class="text-sm sm:text-base opacity-90 leading-snug"></p>
           </div>
 
           {slides.length > 1 && (
@@ -112,21 +113,21 @@ const slides = Object.entries(raw)
               <button
                 id="c101text-prev"
                 aria-label="Previous photo"
-                class="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/50 hover:bg-black/75 text-white text-2xl font-bold flex items-center justify-center transition"
+                class="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/50 hover:bg-black/75 text-white text-2xl font-bold flex items-center justify-center transition z-10"
               >
                 &lsaquo;
               </button>
               <button
                 id="c101text-next"
                 aria-label="Next photo"
-                class="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/50 hover:bg-black/75 text-white text-2xl font-bold flex items-center justify-center transition"
+                class="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/50 hover:bg-black/75 text-white text-2xl font-bold flex items-center justify-center transition z-10"
               >
                 &rsaquo;
               </button>
 
               <div
                 id="c101text-dots"
-                class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2 flex-wrap justify-center max-w-xs"
+                class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2 flex-wrap justify-center max-w-xs z-10"
                 role="tablist"
                 aria-label="Select photo"
               >
@@ -150,6 +151,8 @@ const slides = Object.entries(raw)
       </section>
     )}
   </div>
+
+  <script type="application/json" id="c101text-data" set:html={captionsJSON}></script>
 </Layout>
 
 <script>
@@ -159,14 +162,24 @@ const slides = Object.entries(raw)
     const prevBtn = document.getElementById(`${prefix}-prev`);
     const nextBtn = document.getElementById(`${prefix}-next`);
     const counter = document.getElementById(`${prefix}-counter`);
+    const titleEl = document.getElementById(`${prefix}-title`);
+    const captionEl = document.getElementById(`${prefix}-caption`);
+    const dataEl = document.getElementById(`${prefix}-data`);
+    const captions = dataEl ? JSON.parse(dataEl.textContent || '[]') : [];
     const dots = document.querySelectorAll(`#${prefix}-dots .dot`);
     const slides = track ? Array.from(track.children) : [];
 
-    if (!track || slides.length <= 1) return;
+    if (!track || slides.length === 0) return;
 
     const total = slides.length;
     let current = 0;
     let timer;
+
+    function updateCaption(i) {
+      const c = captions[i] || { title: '', caption: '' };
+      if (titleEl) titleEl.textContent = c.title || '';
+      if (captionEl) captionEl.textContent = c.caption || '';
+    }
 
     function goTo(index) {
       current = ((index % total) + total) % total;
@@ -180,7 +193,12 @@ const slides = Object.entries(raw)
         d.setAttribute('aria-selected', String(active));
       });
       if (counter) counter.textContent = `${current + 1} / ${total}`;
+      updateCaption(current);
     }
+
+    updateCaption(0);
+
+    if (slides.length <= 1) return;
 
     function startAuto() {
       clearInterval(timer);
