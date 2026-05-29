@@ -1,16 +1,35 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+
+/* =========================================================
+   EDIT ONLY THIS LIST — title + caption for each image
+   Keys must match EXACT filenames in:
+     /src/assets/expertise files/108/
+   ========================================================= */
+const texts: Record<string, { title: string; caption: string }> = {
+  // No images yet — drop files into the matching /src/assets/expertise files/ folder.
+};
+/* ===== END OF EDITABLE SECTION ===== */
+
 function byFilename(pathA: string, pathB: string) {
   const name = (p: string) => p.split('/').pop() ?? p;
   return name(pathA).localeCompare(name(pathB), undefined, { numeric: true, sensitivity: 'base' });
 }
+
 const raw = import.meta.glob<{ default: { src: string } }>(
   '../../assets/expertise files/108/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}',
   { eager: true }
 );
-const images = Object.entries(raw)
+
+const slides = Object.entries(raw)
   .sort(([a], [b]) => byFilename(a, b))
-  .map(([, mod]) => mod.default.src);
+  .map(([path, mod]) => {
+    const filename = path.split('/').pop() ?? path;
+    const t = texts[filename] ?? { title: "", caption: "" };
+    return { src: mod.default.src, filename, title: t.title, caption: t.caption };
+  });
+
+const captionsJSON = JSON.stringify(slides.map(s => ({ title: s.title, caption: s.caption })));
 ---
 <Layout title="Painting, Drywall & Patching Minneapolis & Twin Cities | HandyMSP">
     <div class="flex flex-col gap-12 sm:gap-16">
@@ -217,79 +236,35 @@ const images = Object.entries(raw)
             </blockquote>
         </section>
 
-        <!-- PHOTO CAROUSEL -->
-        {images.length > 0 && (
-          <section aria-label="Our painting and patching work photos">
-            <h2 class="text-xl font-semibold text-white mb-6">Our Painting & Patching Work</h2>
-            <div
-              id="c108-root"
-              class="relative overflow-hidden rounded-2xl bg-white/5 ring-1 ring-white/10 select-none"
-              tabindex="0"
-              aria-roledescription="carousel"
-            >
-              <div
-                id="c108-track"
-                class="flex transition-transform duration-500 ease-in-out will-change-transform"
-                aria-live="polite"
-              >
-                {images.map((src, i) => (
-                  <div
-                    class="min-w-full"
-                    role="group"
-                    aria-roledescription="slide"
-                    aria-label={`Painting & Patching photo ${i + 1} of ${images.length}`}
-                    aria-hidden={i !== 0}
-                  >
-                    <img
-                      src={src}
-                      alt={`Painting & Patching photo ${i + 1}`}
-                      class="w-full object-cover"
-                      style="max-height: 30rem; object-position: center;"
-                      loading={i === 0 ? 'eager' : 'lazy'}
-                      decoding="async"
-                    />
+                <!-- PHOTO CAROUSEL -->
+        {slides.length > 0 && (
+          <section aria-label="Project photos">
+            <h2 class="text-xl font-semibold text-white mb-6">Our Work</h2>
+            <div id="c108-root" class="relative overflow-hidden rounded-2xl bg-white/5 ring-1 ring-white/10 select-none" tabindex="0" aria-roledescription="carousel">
+              <div id="c108-track" class="flex transition-transform duration-500 ease-in-out will-change-transform" aria-live="polite">
+                {slides.map((s, i) => (
+                  <div class="min-w-full" role="group" aria-roledescription="slide" aria-label={`Photo ${i + 1} of ${slides.length}`} aria-hidden={i !== 0}>
+                    <img src={s.src} alt={s.title || s.filename} class="w-full object-cover" style="max-height: 30rem; object-position: center;" loading="eager" decoding="async" />
                   </div>
                 ))}
               </div>
-              {images.length > 1 && (
+              <div id="c108-overlay" class="absolute left-0 right-0 bottom-0 px-6 sm:px-8 pt-16 pb-10 bg-gradient-to-t from-black/85 via-black/60 to-transparent text-white pointer-events-none">
+                <h3 id="c108-title" class="text-lg sm:text-2xl font-semibold mb-1"></h3>
+                <p id="c108-caption" class="text-sm sm:text-base opacity-90 leading-snug"></p>
+              </div>
+              {slides.length > 1 && (
                 <>
-                  <button
-                    id="c108-prev"
-                    aria-label="Previous photo"
-                    class="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/50 hover:bg-black/75 text-white text-2xl font-bold flex items-center justify-center transition"
-                  >
-                    ‹
-                  </button>
-                  <button
-                    id="c108-next"
-                    aria-label="Next photo"
-                    class="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/50 hover:bg-black/75 text-white text-2xl font-bold flex items-center justify-center transition"
-                  >
-                    ›
-                  </button>
-                  <div
-                    id="c108-dots"
-                    class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2 flex-wrap justify-center max-w-xs"
-                    role="tablist"
-                    aria-label="Select photo"
-                  >
-                    {images.map((_, i) => (
-                      <button
-                        role="tab"
-                        data-idx={String(i)}
-                        aria-label={`Photo ${i + 1}`}
-                        aria-selected={String(i === 0)}
-                        class={[
-                          'dot w-2 h-2 rounded-full transition-all duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white',
-                          i === 0 ? 'bg-white scale-125' : 'bg-white/40'
-                        ]}
-                      />
+                  <button id="c108-prev" aria-label="Previous photo" class="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/50 hover:bg-black/75 text-white text-2xl font-bold flex items-center justify-center transition z-10">&lsaquo;</button>
+                  <button id="c108-next" aria-label="Next photo" class="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/50 hover:bg-black/75 text-white text-2xl font-bold flex items-center justify-center transition z-10">&rsaquo;</button>
+                  <div id="c108-dots" class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2 flex-wrap justify-center max-w-xs z-10" role="tablist" aria-label="Select photo">
+                    {slides.map((_, i) => (
+                      <button role="tab" data-idx={String(i)} aria-label={`Photo ${i + 1}`} aria-selected={String(i === 0)} class={['dot w-2 h-2 rounded-full transition-all duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white', i === 0 ? 'bg-white scale-125' : 'bg-white/40']} />
                     ))}
                   </div>
                 </>
               )}
             </div>
-            <p id="c108-counter" class="text-center text-sm opacity-40 mt-3">1 / {images.length}</p>
+            <p id="c108-counter" class="text-center text-sm opacity-40 mt-3">1 / {slides.length}</p>
           </section>
         )}
 
@@ -318,6 +293,7 @@ const images = Object.entries(raw)
             </form>
         </section>
     </div>
+    <script type="application/json" id="c108-data" set:html={captionsJSON}></script>
 </Layout>
 
 <script>
@@ -327,12 +303,20 @@ const images = Object.entries(raw)
     const prevBtn = document.getElementById(`${prefix}-prev`);
     const nextBtn = document.getElementById(`${prefix}-next`);
     const counter = document.getElementById(`${prefix}-counter`);
+    const titleEl = document.getElementById(`${prefix}-title`);
+    const captionEl = document.getElementById(`${prefix}-caption`);
+    const dataEl = document.getElementById(`${prefix}-data`);
+    const captions = dataEl ? JSON.parse(dataEl.textContent || '[]') : [];
     const dots = document.querySelectorAll(`#${prefix}-dots .dot`);
     const slides = track ? Array.from(track.children) : [];
-    if (!track || slides.length <= 1) return;
+    if (!track || slides.length === 0) return;
     const total = slides.length;
-    let current = 0;
-    let timer;
+    let current = 0; let timer;
+    function updateCaption(i) {
+      const c = captions[i] || { title: '', caption: '' };
+      if (titleEl) titleEl.textContent = c.title || '';
+      if (captionEl) captionEl.textContent = c.caption || '';
+    }
     function goTo(index) {
       current = ((index % total) + total) % total;
       track.style.transform = `translateX(-${current * 100}%)`;
@@ -345,16 +329,14 @@ const images = Object.entries(raw)
         d.setAttribute('aria-selected', String(active));
       });
       if (counter) counter.textContent = `${current + 1} / ${total}`;
+      updateCaption(current);
     }
-    function startAuto() {
-      clearInterval(timer);
-      timer = setInterval(() => goTo(current + 1), 5000);
-    }
+    updateCaption(0);
+    if (slides.length <= 1) return;
+    function startAuto() { clearInterval(timer); timer = setInterval(() => goTo(current + 1), 5000); }
     prevBtn?.addEventListener('click', () => { goTo(current - 1); startAuto(); });
     nextBtn?.addEventListener('click', () => { goTo(current + 1); startAuto(); });
-    dots.forEach((d) =>
-      d.addEventListener('click', () => { goTo(Number(d.dataset.idx)); startAuto(); })
-    );
+    dots.forEach((d) => d.addEventListener('click', () => { goTo(Number(d.dataset.idx)); startAuto(); }));
     root?.addEventListener('keydown', (e) => {
       if (e.key === 'ArrowLeft') { goTo(current - 1); startAuto(); }
       if (e.key === 'ArrowRight') { goTo(current + 1); startAuto(); }
@@ -362,15 +344,10 @@ const images = Object.entries(raw)
     root?.addEventListener('mouseenter', () => clearInterval(timer));
     root?.addEventListener('mouseleave', startAuto);
     let touchStartX = 0;
-    root?.addEventListener('touchstart', (e) => {
-      touchStartX = e.touches[0].clientX;
-    }, { passive: true });
+    root?.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; }, { passive: true });
     root?.addEventListener('touchend', (e) => {
       const diff = touchStartX - e.changedTouches[0].clientX;
-      if (Math.abs(diff) > 40) {
-        goTo(diff > 0 ? current + 1 : current - 1);
-        startAuto();
-      }
+      if (Math.abs(diff) > 40) { goTo(diff > 0 ? current + 1 : current - 1); startAuto(); }
     }, { passive: true });
     startAuto();
   }
