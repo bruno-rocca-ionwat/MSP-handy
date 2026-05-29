@@ -36,7 +36,7 @@ const caulkingImages = Object.entries(caulkingRaw)
   .sort(([a], [b]) => byFilename(a, b))
   .map(([, mod], i, arr) => ({
     src:   mod.default.src,
-    label: `Caulking technique photo ${i + 1} of ${arr.length}`,
+    label: `Technique photo ${i + 1} of ${arr.length}`,
   }))
   .slice(0, 50);
 
