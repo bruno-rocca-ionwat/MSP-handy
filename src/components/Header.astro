@@ -70,9 +70,13 @@ import Logo from '../components/Logo.astro';
 </nav>
 
 <script>
-  const li = document.getElementById('expertise-li');
-  if (li) {
-    li.querySelector('a').addEventListener('click', function(e) {
+  // Mobile tap-to-open behavior for both HomeOwners and Expertise dropdowns.
+  ['homeowner-li', 'expertise-li'].forEach(function (id) {
+    const li = document.getElementById(id);
+    if (!li) return;
+    const link = li.querySelector('a');
+    if (!link) return;
+    link.addEventListener('click', function (e) {
       if (!window.matchMedia('(hover: hover)').matches) {
         if (!li.classList.contains('open')) {
           e.preventDefault();
@@ -80,13 +84,14 @@ import Logo from '../components/Logo.astro';
         }
       }
     });
-    document.addEventListener('click', function(e) {
+    document.addEventListener('click', function (e) {
       if (!li.contains(e.target)) li.classList.remove('open');
     });
-  }
+  });
 </script>
 
 <style>
+  #homeowner-li.open > div:last-child,
   #expertise-li.open > div:last-child {
     visibility: visible !important;
     opacity: 1 !important;
